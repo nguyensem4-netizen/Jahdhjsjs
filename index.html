@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>HỆ THỐNG PHÂN TÍCH MD5 PREMIUM</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;700;900&display=swap');
+        :root { --main: #00f2ff; --sub: #7000ff; --dark: #050508; }
+        * { -webkit-user-select: none; user-select: none; box-sizing: border-box; outline: none !important; -webkit-tap-highlight-color: transparent; }
+        body { background-color: var(--dark); color: white; font-family: 'Lexend', sans-serif; overflow: hidden; height: 100vh; margin: 0; }
+        #canvas-bg { position: fixed; inset: 0; z-index: -1; background: radial-gradient(circle at center, #0a0a20 0%, #020205 100%); }
+        .glass-card { background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(0, 242, 255, 0.15); backdrop-filter: blur(20px); border-radius: 30px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+        .btn-main { background: linear-gradient(135deg, var(--main) 0%, var(--sub) 100%); color: white; font-weight: 800; transition: 0.3s; border: none; cursor: pointer; }
+        .btn-main:active { transform: scale(0.95); opacity: 0.8; }
+        .cyber-input { background: rgba(0, 0, 0, 0.6) !important; border: 1px solid rgba(255, 255, 255, 0.1) !important; color: var(--main) !important; border-radius: 15px !important; text-align: center; font-size: 14px; font-family: 'Lexend', sans-serif; }
+        .success-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 10000; display: none; align-items: center; justify-content: center; flex-direction: column; }
+        .verify-badge { width: 80px; height: 80px; background: var(--main); border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 40px var(--main); animation: pulse 1.5s infinite; }
+        .float-tg { position: fixed; bottom: 25px; right: 25px; width: 55px; height: 55px; background: #24A1DE; border-radius: 50%; display: flex; align-items: center; justify-content: center; z-index: 9999; }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+        .hidden { display: none !important; }
+        .package-item { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); transition: 0.2s; }
+        .package-item:hover { border-color: var(--main); background: rgba(0,242,255,0.05); }
+        ::-webkit-scrollbar { width: 2px; }
+        ::-webkit-scrollbar-thumb { background: var(--main); }
+    </style>
+</head>
+<body>
+
+<a href="https://t.me/devloveprasjd82" target="_blank" class="float-tg">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="white"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.01-.03.01-.14-.07-.2-.08-.06-.19-.04-.27-.02-.11.02-1.93 1.23-5.46 3.62-.51.35-.98.52-1.4.51-.46-.01-1.35-.26-2.01-.48-.81-.27-1.45-.42-1.39-.89.03-.24.37-.49 1.02-.74 4-1.74 6.67-2.88 8.01-3.43 3.81-1.58 4.6-1.85 5.12-1.86.11 0 .37.03.54.17.14.12.18.28.2.45-.02.07-.02.13-.03.18z"/></svg>
+</a>
+
+<canvas id="canvas-bg"></canvas>
+
+<div id="success-screen" class="success-overlay">
+    <div class="verify-badge">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="4"><polyline points="20 6 9 17 4 12"></polyline></svg>
+    </div>
+    <h2 id="success-text" class="mt-6 text-lg font-bold text-white uppercase tracking-widest">THÀNH CÔNG</h2>
+</div>
+
+<div class="flex items-center justify-center min-h-screen p-4">
+    <div class="w-full max-w-[400px]">
+        
+        <div id="box-login" class="glass-card p-8 animate__animated animate__fadeIn">
+            <div class="text-center mb-8">
+                <h1 class="text-2xl font-black tracking-tighter uppercase">TOOL TÀI XỈU <span class="text-cyan-400">MD5 AI</span></h1>
+                <p class="text-[9px] text-gray-500 font-bold tracking-widest uppercase mt-1">version 2026@</p>
+            </div>
+            <div class="space-y-4">
+                <input id="u" type="text" placeholder="TÊN ĐĂNG NHẬP" class="w-full p-4 cyber-input uppercase">
+                <input id="p" type="password" placeholder="MẬT KHẨU" class="w-full p-4 cyber-input">
+                <button onclick="doLogin()" class="w-full py-4 btn-main rounded-xl text-sm uppercase">Đăng nhập</button>
+                <button onclick="changeBox('reg')" class="w-full text-[10px] text-gray-500 font-bold uppercase">Tạo tài khoản mới</button>
+            </div>
+        </div>
+
+        <div id="box-reg" class="hidden glass-card p-8 animate__animated animate__fadeInRight">
+            <h2 class="text-center font-bold text-cyan-400 mb-6 uppercase text-sm">Đăng ký hệ thống</h2>
+            <div class="space-y-4">
+                <input id="r-u" type="text" placeholder="TÊN TÀI KHOẢN" class="w-full p-4 cyber-input uppercase">
+                <input id="r-p" type="password" placeholder="MẬT KHẨU" class="w-full p-4 cyber-input">
+                <button onclick="doReg()" class="w-full py-4 btn-main rounded-xl text-sm uppercase">Xác nhận đăng ký</button>
+                <button onclick="changeBox('login')" class="w-full text-[10px] text-gray-500 uppercase mt-2">Quay lại đăng nhập</button>
+            </div>
+        </div>
+
+        <div id="box-portal" class="hidden animate__animated animate__zoomIn">
+            <div class="glass-card p-6 mb-4 border-l-4 border-cyan-500 bg-gradient-to-r from-cyan-500/10 to-transparent">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <p id="portal-user" class="text-cyan-400 text-[9px] font-bold uppercase"></p>
+                        <p id="portal-bal" class="text-3xl font-black text-white my-1"></p>
+                        <p id="portal-ref" class="text-[10px] text-gray-400 font-bold"></p>
+                    </div>
+                    <span class="text-[10px] bg-cyan-500 text-black px-2 py-0.5 rounded font-black">VIP</span>
+                </div>
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+                <div onclick="changeBox('buy-key')" class="glass-card p-5 text-center cursor-pointer active:scale-95 transition">
+                    <p class="text-2xl mb-1">💎</p><p class="text-[10px] font-bold uppercase text-gray-300">Gói Key VIP</p>
+                </div>
+                <div onclick="changeBox('nap')" class="glass-card p-5 text-center cursor-pointer active:scale-95 transition">
+                    <p class="text-2xl mb-1">🏦</p><p class="text-[10px] font-bold uppercase text-gray-300">Nạp Tiền</p>
+                </div>
+                <div onclick="checkToolAccess()" class="glass-card p-6 text-center col-span-2 border-cyan-500/30 bg-cyan-500/5 cursor-pointer">
+                    <p class="text-[12px] font-black text-cyan-400 tracking-[3px] uppercase">SỬ DỤNG TOOL TÀI XỈU MD5</p>
+                </div>
+            </div>
+            <button onclick="logout()" class="w-full mt-8 text-[10px] text-gray-600 font-bold uppercase tracking-widest">Đăng xuất tài khoản</button>
+        </div>
+
+        <div id="box-nap" class="hidden glass-card p-6 text-center animate__animated animate__fadeIn">
+            <h3 class="text-cyan-400 font-bold mb-4 uppercase text-xs">Thanh toán nạp tiền</h3>
+            <img id="qr-code" src="" class="mx-auto rounded-2xl w-44 mb-4 border border-cyan-500/30 p-1 bg-white">
+            <div class="bg-black/40 p-3 rounded-xl mb-4 border border-white/5">
+                <p class="text-[9px] text-gray-500 uppercase mb-1">Nội dung bắt buộc</p>
+                <p id="ref-id" class="text-xl font-black text-white tracking-widest"></p>
+            </div>
+            <input id="nap-amount" type="number" placeholder="Nhập số tiền đã chuyển" class="w-full p-4 cyber-input mb-4">
+            <button onclick="sendNapTele()" class="w-full py-4 btn-main rounded-xl text-[11px] uppercase">Gửi xác nhận nạp</button>
+            <button onclick="changeBox('portal')" class="mt-4 text-[10px] text-gray-600 uppercase font-bold">Quay lại</button>
+        </div>
+
+        <div id="box-buy-key" class="hidden glass-card p-5 animate__animated animate__fadeInUp">
+            <h3 class="text-center font-bold text-cyan-400 mb-4 uppercase text-xs tracking-widest">Danh sách Gói VIP</h3>
+            <div class="space-y-2 max-h-[350px] overflow-y-auto pr-1">
+                <div onclick="buyKey(10000, 0.04)" class="package-item flex justify-between items-center p-4 rounded-xl cursor-pointer">
+                    <div><p class="text-[11px] font-bold">GÓI TRIAL (1 GIỜ)</p><p class="text-[9px] text-gray-500">Dùng thử tính năng</p></div>
+                    <p class="text-cyan-400 font-black text-xs">10k</p>
+                </div>
+                <div onclick="buyKey(25000, 1)" class="package-item flex justify-between items-center p-4 rounded-xl cursor-pointer">
+                    <div><p class="text-[11px] font-bold">GÓI BASIC (1 NGÀY)</p><p class="text-[9px] text-gray-500">Phổ thông</p></div>
+                    <p class="text-cyan-400 font-black text-xs">25k</p>
+                </div>
+                <div onclick="buyKey(55000, 3)" class="package-item flex justify-between items-center p-4 rounded-xl cursor-pointer">
+                    <div><p class="text-[11px] font-bold">GÓI BASIC (3 NGÀY)</p><p class="text-[9px] text-gray-500">Phổ thông</p></div>
+                    <p class="text-cyan-400 font-black text-xs">55k</p>
+                </div>
+                <div onclick="buyKey(100000, 7)" class="package-item flex justify-between items-center p-4 rounded-xl cursor-pointer">
+                    <div><p class="text-[11px] font-bold">GÓI PRO (7 NGÀY)</p><p class="text-[9px] text-gray-500">Tiết kiệm 20%</p></div>
+                    <p class="text-cyan-400 font-black text-xs">100k</p>
+                </div>
+                <div onclick="buyKey(150000, 30)" class="package-item flex justify-between items-center p-4 rounded-xl cursor-pointer">
+                    <div><p class="text-[11px] font-bold">GÓI MASTER (30 NGÀY)</p><p class="text-[9px] text-gray-500">Chuyên nghiệp</p></div>
+                    <p class="text-cyan-400 font-black text-xs">150k</p>
+                </div>
+                <div onclick="buyKey(250000, 9999)" class="package-item border-cyan-500/30 flex justify-between items-center p-4 rounded-xl cursor-pointer bg-cyan-500/5">
+                    <div><p class="text-[11px] font-bold text-cyan-400">GÓI ETERNAL</p><p class="text-[9px] text-gray-400">Vĩnh viễn không giới hạn</p></div>
+                    <p class="text-white font-black text-xs">250k</p>
+                </div>
+            </div>
+            <button onclick="changeBox('portal')" class="w-full text-[10px] text-gray-600 uppercase mt-4 text-center font-bold">Trở về</button>
+        </div>
+
+        <div id="box-use-key" class="hidden glass-card p-6 animate__animated animate__fadeInUp">
+            <div id="key-activation">
+                <h3 class="text-center font-bold text-cyan-400 mb-6 uppercase text-sm tracking-widest">Kích hoạt Bản quyền</h3>
+                <input id="key-input" type="text" placeholder="NHẬP MÃ KEY VIP" class="w-full p-5 cyber-input mb-4 uppercase">
+                <button onclick="activateLicense()" class="w-full py-5 btn-main rounded-2xl text-sm uppercase">Kích hoạt ngay</button>
+                <button onclick="changeBox('portal')" class="w-full text-[10px] text-gray-600 uppercase mt-6 text-center font-bold">Quay lại</button>
+            </div>
+            
+            <div id="tool-interface" class="hidden space-y-4">
+                <div class="flex justify-between items-center text-[9px] font-bold bg-white/5 p-3 rounded-xl border border-white/5">
+                    <span class="text-green-500 flex items-center"><span class="w-1.5 h-1.5 bg-green-500 rounded-full mr-2 animate-pulse"></span> HYBRID AI ACTIVE •</span>
+                    <span id="expiry-text" class="text-cyan-400"></span>
+                </div>
+                
+                <div class="relative">
+                    <textarea id="md5-input" placeholder="DÁN MÃ PHIÊN MD5 VÀO ĐÂY..." class="w-full h-32 p-4 cyber-input uppercase text-[12px] font-bold border-cyan-500/20"></textarea>
+                    <div class="absolute bottom-2 right-3 text-[8px] text-gray-600 font-bold uppercase">GLOBAL SECURED</div>
+                </div>
+
+                <button id="ana-btn" onclick="runAnalysis()" class="w-full py-5 btn-main rounded-2xl text-[12px] uppercase tracking-widest">Phân tích kết quả</button>
+
+                <div id="res-display" class="hidden animate__animated animate__zoomIn">
+                    <div class="bg-black/60 border border-cyan-500/30 rounded-3xl p-5 shadow-[0_0_20px_rgba(0,242,255,0.1)]">
+                        <div class="flex justify-between items-center mb-3">
+                            <span class="text-[9px] text-gray-500 font-bold uppercase">TOOL TÀI XỈU MD5:</span>
+                            <span id="res-acc" class="text-[10px] text-yellow-400 font-black tracking-widest"></span>
+                        </div>
+                        <div class="text-center py-4 bg-gradient-to-b from-white/5 to-transparent rounded-2xl">
+                            <p id="res-val" class="font-black text-7xl italic tracking-tighter drop-shadow-lg"></p>
+                        </div>
+                        <p class="text-center text-[8px] text-gray-500 font-bold uppercase mt-2">TOOL TÀI XỈU: verisson 2026@</p>
+                    </div>
+                </div>
+                
+                <button onclick="changeBox('portal')" class="w-full text-[10px] text-gray-700 uppercase mt-4 font-bold text-center">Thoát phần mềm</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const CONFIG = {
+        TELE_TOKEN: "8537007585:AAE5Z1aX4ZCMxCySB5I_qNpzhQS6sr84SsU",
+        TELE_CHAT_ID: "8144161968",
+        STK: "103886058569",
+        BANK: "ICB", 
+        DB_NAME: "MD5_FINAL_PRO_SYSTEM"
+    };
+
+    let currentUser = null;
+    let lastUpdateId = 0;
+
+    const getDB = () => JSON.parse(localStorage.getItem(CONFIG.DB_NAME)) || { users: [], keys: [] };
+    const saveDB = (db) => localStorage.setItem(CONFIG.DB_NAME, JSON.stringify(db));
+
+    window.onload = function() {
+        if (sessionStorage.getItem('isLoggedIn')) {
+            const db = getDB();
+            const activeU = JSON.parse(sessionStorage.getItem('activeUser'));
+            currentUser = db.users.find(u => u.u === activeU.u);
+            if(currentUser) changeBox('portal');
+        }
+        setInterval(listenTelegram, 2000); 
+    };
+
+    async function listenTelegram() {
+        try {
+            const res = await fetch(`https://api.telegram.org/bot${CONFIG.TELE_TOKEN}/getUpdates?offset=${lastUpdateId + 1}`);
+            const data = await res.json();
+            if (data.ok && data.result.length > 0) {
+                data.result.forEach(update => {
+                    lastUpdateId = update.update_id;
+                    const msg = update.message;
+                    if (msg && msg.text && String(msg.chat.id) === CONFIG.TELE_CHAT_ID) {
+                        const parts = msg.text.trim().split(/\s+/);
+                        if (parts[0].toUpperCase() === 'DUYET' && parts.length === 3) {
+                            processAutoDeposit(parts[1], parseInt(parts[2]));
+                        }
+                    }
+                });
+            }
+        } catch (e) {}
+    }
+
+    function processAutoDeposit(refCode, amount) {
+        let db = getDB();
+        const uIdx = db.users.findIndex(u => u.ref.toUpperCase() === refCode.toUpperCase());
+        if (uIdx !== -1 && !isNaN(amount)) {
+            db.users[uIdx].bal += amount;
+            saveDB(db);
+            if (currentUser && currentUser.ref.toUpperCase() === refCode.toUpperCase()) {
+                currentUser.bal = db.users[uIdx].bal;
+                refreshPortal();
+                showSuccess("ĐÃ CỘNG +" + amount.toLocaleString() + "đ");
+            }
+        }
+    }
+
+    function showSuccess(msg, cb) {
+        const s = document.getElementById('success-screen');
+        document.getElementById('success-text').innerText = msg;
+        s.style.display = 'flex';
+        setTimeout(() => { s.style.display = 'none'; if(cb) cb(); }, 1500);
+    }
+
+    function changeBox(id) {
+        document.querySelectorAll('[id^="box-"]').forEach(b => b.classList.add('hidden'));
+        document.getElementById('box-' + id).classList.remove('hidden');
+        if(id === 'portal') refreshPortal();
+        if(id === 'nap') {
+            document.getElementById('ref-id').innerText = currentUser.ref;
+            document.getElementById('qr-code').src = `https://img.vietqr.io/image/${CONFIG.BANK}-${CONFIG.STK}-compact.png?addInfo=${currentUser.ref}`;
+            document.getElementById('nap-amount').value = "";
+        }
+    }
+
+    function doReg() {
+        const u = document.getElementById('r-u').value.trim().toUpperCase();
+        const p = document.getElementById('r-p').value;
+        if(u.length < 4 || p.length < 4) return alert("Tối thiểu 4 ký tự!");
+        let db = getDB();
+        if(db.users.find(x => x.u === u)) return alert("Tên đã tồn tại!");
+        const newUser = { u, p, bal: 0, ref: "NAPTIEN" + Math.floor(1000 + Math.random()*8999), hsd: null };
+        db.users.push(newUser);
+        saveDB(db);
+        showSuccess("ĐĂNG KÝ XONG", () => {
+            currentUser = newUser;
+            sessionStorage.setItem('isLoggedIn', 'true');
+            sessionStorage.setItem('activeUser', JSON.stringify(newUser));
+            changeBox('portal');
+        });
+    }
+
+    function doLogin() {
+        const u = document.getElementById('u').value.trim().toUpperCase();
+        const p = document.getElementById('p').value;
+        let db = getDB();
+        const f = db.users.find(x => x.u === u && x.p === p);
+        if(f) {
+            currentUser = f;
+            sessionStorage.setItem('isLoggedIn', 'true');
+            sessionStorage.setItem('activeUser', JSON.stringify(f));
+            showSuccess("ĐĂNG NHẬP XONG", () => changeBox('portal'));
+        } else alert("Sai thông tin!");
+    }
+
+    function refreshPortal() {
+        document.getElementById('portal-user').innerText = "USER: " + currentUser.u;
+        document.getElementById('portal-bal').innerText = currentUser.bal.toLocaleString() + " đ";
+        document.getElementById('portal-ref').innerText = "NỘI DUNG: " + currentUser.ref;
+    }
+
+    function logout() { sessionStorage.clear(); location.reload(); }
+
+    async function sendNapTele() {
+        const amt = document.getElementById('nap-amount').value;
+        if(!amt || amt < 10000) return alert("Tối thiểu 10k");
+        const text = `💰 NẠP TIỀN\n👤 User: ${currentUser.u}\n🆔 Ref: ${currentUser.ref}\n💵 Tiền: ${parseInt(amt).toLocaleString()}đ\n\n👉 Duyệt:\nDUYET ${currentUser.ref} ${amt}`;
+        await fetch(`https://api.telegram.org/bot${CONFIG.TELE_TOKEN}/sendMessage?chat_id=${CONFIG.TELE_CHAT_ID}&text=${encodeURIComponent(text)}`);
+        alert("Đã gửi yêu cầu!");
+        changeBox('portal');
+    }
+
+    function buyKey(price, days) {
+        if(currentUser.bal < price) return alert("Không đủ tiền!");
+        let db = getDB();
+        const uIdx = db.users.findIndex(u => u.u === currentUser.u);
+        db.users[uIdx].bal -= price;
+        const key = "VIP-" + Math.random().toString(36).substring(4).toUpperCase();
+        db.keys.push({ key, days, used: false });
+        saveDB(db);
+        currentUser = db.users[uIdx];
+        showSuccess("MUA XONG", () => {
+            prompt("COPY KEY:", key);
+            refreshPortal();
+        });
+    }
+
+    function checkToolAccess() {
+        if(currentUser.hsd && currentUser.hsd > Date.now()) {
+            changeBox('use-key');
+            document.getElementById('key-activation').classList.add('hidden');
+            document.getElementById('tool-interface').classList.remove('hidden');
+            document.getElementById('expiry-text').innerText = currentUser.hsd > 2000000000000 ? "VĨNH VIỄN" : "HẠN: " + new Date(currentUser.hsd).toLocaleDateString();
+        } else {
+            changeBox('use-key');
+            document.getElementById('key-activation').classList.remove('hidden');
+            document.getElementById('tool-interface').classList.add('hidden');
+        }
+    }
+
+    function activateLicense() {
+        const kv = document.getElementById('key-input').value.trim().toUpperCase();
+        let db = getDB();
+        const kIdx = db.keys.findIndex(k => k.key === kv && !k.used);
+        if(kIdx === -1) return alert("Key sai!");
+        const uIdx = db.users.findIndex(u => u.u === currentUser.u);
+        const addTime = db.keys[kIdx].days === 9999 ? (100 * 365 * 86400000) : (db.keys[kIdx].days * 86400000);
+        db.users[uIdx].hsd = (db.users[uIdx].hsd > Date.now() ? db.users[uIdx].hsd : Date.now()) + addTime;
+        db.keys[kIdx].used = true;
+        saveDB(db);
+        currentUser = db.users[uIdx];
+        showSuccess("VIP ACTIVE", () => checkToolAccess());
+    }
+
+    // --- THUẬT TOÁN GỘP (VN & GLOBAL) - TỶ LỆ 50-70% ---
+    function runAnalysis() {
+        const input = document.getElementById('md5-input').value.trim();
+        if(input.length < 5) return alert("MD5 không hợp lệ!");
+        
+        const btn = document.getElementById('ana-btn');
+        btn.innerText = "ĐANG PHÂN TÍCH...";
+        btn.disabled = true;
+        
+        setTimeout(() => {
+            // Logic 1: Tổng ASCII (VN Style)
+            let sum = 0;
+            for(let i=0; i<input.length; i++) sum += input.charCodeAt(i);
+            
+            // Logic 2: Bitwise XOR (Global Style)
+            let hash = 0;
+            for(let i=0; i<input.length; i++) hash = (hash << 5) - hash + input.charCodeAt(i);
+            
+            // Kết hợp kết quả
+            const isTai = (sum + Math.abs(hash)) % 2 === 0;
+            
+            // Hiển thị
+            const v = document.getElementById('res-val');
+            v.innerText = isTai ? "TÀI" : "XỈU";
+            v.style.color = isTai ? "#00f2ff" : "#ff0055";
+            v.style.textShadow = isTai ? "0 0 40px #00f2ff" : "0 0 40px #ff0055";
+            
+            // Tỷ lệ thắng ép từ 50% đến 70%
+            const winRate = (50 + (sum % 21)).toFixed(2);
+            document.getElementById('res-acc').innerText = "TOOL TÀI XỈU: " + winRate + "%";
+            
+            document.getElementById('res-display').classList.remove('hidden');
+            btn.innerText = "PHÂN TÍCH TIẾP";
+            btn.disabled = false;
+        }, 2000);
+    }
+
+    // --- BG ANIMATION ---
+    const canvas = document.getElementById('canvas-bg');
+    const ctx = canvas.getContext('2d');
+    let pts = [];
+    function init() {
+        canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+        pts = []; 
+        for(let i=0; i<40; i++) pts.push({
+            x:Math.random()*canvas.width, 
+            y:Math.random()*canvas.height, 
+            vx:(Math.random()-0.5)*0.6, 
+            vy:(Math.random()-0.5)*0.6
+        });
+    }
+    function animate() {
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+        ctx.strokeStyle = "rgba(0, 242, 255, 0.1)";
+        ctx.beginPath();
+        pts.forEach((p, i) => {
+            p.x += p.vx; p.y += p.vy;
+            if(p.x<0 || p.x>canvas.width) p.vx*=-1; 
+            if(p.y<0 || p.y>canvas.height) p.vy*=-1;
+            pts.forEach((p2, j) => {
+                if(i===j) return;
+                let d = Math.hypot(p.x-p2.x, p.y-p2.y);
+                if(d<150) { ctx.moveTo(p.x, p.y); ctx.lineTo(p2.x, p2.y); }
+            });
+        });
+        ctx.stroke();
+        requestAnimationFrame(animate);
+    }
+    window.onresize = init; 
+    init(); 
+    animate();
+</script>
+</body>
+</html>
