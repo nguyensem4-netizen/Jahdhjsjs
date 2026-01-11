@@ -148,7 +148,7 @@
                     <span id="expiry-text" class="text-cyan-400"></span>
                 </div>
                 <textarea id="md5-input" placeholder="DÁN MÃ PHIÊN MD5 VÀO ĐÂY..." class="w-full h-32 p-4 cyber-input uppercase text-[12px] font-bold"></textarea>
-                <button id="ana-btn" onclick="runAnalysis()" class="w-full py-5 btn-main rounded-2xl text-[12px] uppercase tracking-widest">Bắt đầu giải mã</button>
+                <button id="ana-btn" onclick="runAnalysis()" class="w-full py-5 btn-main rounded-2xl text-[12px] uppercase tracking-widest">Bắt đầu phân tích</button>
                 <div id="res-display" class="hidden">
                     <div class="bg-black/60 border border-cyan-500/30 rounded-3xl p-5 text-center">
                         <span id="res-acc" class="text-[10px] text-yellow-400 font-black">CHÍNH XÁC 100%</span>
@@ -208,7 +208,7 @@
                 currentUser = db.users[uIdx];
                 sessionStorage.setItem('activeUser', JSON.stringify(currentUser));
                 refreshPortal();
-                showSuccess("ĐÃ DUYỆT +" + amount.toLocaleString() + "đ");
+                showSuccess("NẠP THÀNH CÔNG +" + amount.toLocaleString() + "đ");
             }
         }
     }
