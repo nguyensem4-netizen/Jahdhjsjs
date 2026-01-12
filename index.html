@@ -57,14 +57,12 @@
         #login-error { color: #ff4d4d; font-size: 10px; font-weight: 800; text-transform: uppercase; margin-top: 10px; display: none; }    
         .buy-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 2000; display: none; align-items: center; justify-content: center; padding: 20px; }    
   
-        /* MỚI: CSS CHUYỂN HƯỚNG RADAR */  
         .transition-overlay { position: fixed; inset: 0; background: radial-gradient(circle, #0a0a14 0%, #020205 100%); z-index: 11000; display: none; align-items: center; justify-content: center; flex-direction: column; }  
         .radar-scan { width: 120px; height: 120px; border: 2px solid var(--main); border-radius: 50%; position: relative; overflow: hidden; box-shadow: 0 0 20px rgba(0, 242, 255, 0.2); }  
         .radar-scan::after { content: ""; position: absolute; inset: 0; background: conic-gradient(from 0deg, transparent 80%, var(--main)); animation: rotate-radar 1.2s linear infinite; }  
         @keyframes rotate-radar { to { transform: rotate(360deg); } }  
         .matrix-text { font-family: monospace; font-size: 10px; color: var(--main); margin-top: 25px; letter-spacing: 3px; text-shadow: 0 0 5px var(--main); font-weight: bold; }  
         
-        /* CSS MỚI CHO BOX THÔNG TIN */
         .info-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
         .info-label { font-size: 10px; color: #888; font-weight: bold; text-transform: uppercase; }
         .info-value { font-size: 11px; color: #fff; font-weight: 900; }
@@ -229,7 +227,6 @@
     
         <div id="box-info" class="hidden glass-card p-6 animate__animated animate__fadeIn">
             <h3 class="text-center font-bold text-cyan-400 mb-6 uppercase text-sm">Hồ Sơ Cá Nhân</h3>
-            
             <div class="space-y-1 mb-6">
                 <div class="info-row">
                     <span class="info-label">Tên Tài Khoản:</span>
@@ -252,12 +249,10 @@
                     <span id="info-hsd" class="info-value text-yellow-400">Chưa kích hoạt</span>
                 </div>
             </div>
-
             <h4 class="text-[10px] font-bold text-gray-500 uppercase mb-3">Lịch sử mua Key</h4>
             <div id="info-key-list" class="max-h-[120px] overflow-y-auto mb-6 pr-1">
                 <p class="text-[9px] text-center text-gray-600">Chưa có lịch sử giao dịch</p>
             </div>
-
             <div class="border-t border-white/5 pt-4">
                 <h4 class="text-[10px] font-bold text-gray-500 uppercase mb-3">Đổi mật khẩu</h4>
                 <input id="new-p" type="password" placeholder="MẬT KHẨU MỚI" class="w-full p-3 cyber-input mb-3 text-[11px]">
@@ -308,7 +303,7 @@
 </div>    
     
 <script>    
-    const CONFIG = {    
+    var CONFIG = {    
         TELE_TOKEN: "8537007585:AAE5Z1aX4ZCMxCySB5I_qNpzhQS6sr84SsU",    
         TELE_CHAT_ID: "8144161968",    
         STK: "103886058569",    
@@ -316,25 +311,28 @@
         DB_NAME: "MD5_DATABASE_PRO_V6_8"    
     };    
     
-    let currentUser = null;    
-    let lastUpdateId = 0;    
+    var currentUser = null;    
+    var lastUpdateId = 0;    
     
-    const getDB = () => JSON.parse(localStorage.getItem(CONFIG.DB_NAME)) || { users: [], keys: [], history: [] };    
-    const saveDB = (db) => localStorage.setItem(CONFIG.DB_NAME, JSON.stringify(db));    
+    var getDB = function() {
+        var data = localStorage.getItem(CONFIG.DB_NAME);
+        return data ? JSON.parse(data) : { users: [], keys: [], history: [] };
+    };
+    var saveDB = function(db) { localStorage.setItem(CONFIG.DB_NAME, JSON.stringify(db)); };    
     
     function navigateTo(boxId) {  
-        const ts = document.getElementById('transition-screen');  
-        const ms = document.getElementById('matrix-status');  
+        var ts = document.getElementById('transition-screen');  
+        var ms = document.getElementById('matrix-status');  
         ts.style.display = 'flex';  
           
-        let steps = ["ĐANG KẾT NỐI...", "ĐỒNG BỘ MD5...", "QUÉT DỮ LIỆU...", "HOÀN TẤT!"];  
-        let i = 0;  
-        let interval = setInterval(() => {  
+        var steps = ["ĐANG KẾT NỐI...", "ĐỒNG BỘ MD5...", "QUÉT DỮ LIỆU...", "HOÀN TẤT!"];  
+        var i = 0;  
+        var interval = setInterval(function() {  
             ms.innerText = steps[i];  
             i++;  
             if(i >= steps.length) {  
                 clearInterval(interval);  
-                setTimeout(() => {  
+                setTimeout(function() {  
                     ts.style.display = 'none';  
                     changeBox(boxId);  
                 }, 400);  
@@ -343,8 +341,8 @@
     }  
   
     function checkPassStrength(p) {    
-        const bar = document.getElementById('strength-bar');    
-        const label = document.getElementById('strength-label');    
+        var bar = document.getElementById('strength-bar');    
+        var label = document.getElementById('strength-label');    
         bar.className = 'pass-strength';    
         if (p.length === 0) label.innerText = "BẢO MẬT: CHƯA NHẬP";    
         else if (p.length < 6) { label.innerText = "BẢO MẬT: YẾU"; bar.classList.add('strength-weak'); }    
@@ -354,14 +352,14 @@
     
     async function listenTelegram() {    
         try {    
-            const res = await fetch(`https://api.telegram.org/bot${CONFIG.TELE_TOKEN}/getUpdates?offset=${lastUpdateId + 1}`);    
-            const data = await res.json();    
+            var res = await fetch("https://api.telegram.org/bot" + CONFIG.TELE_TOKEN + "/getUpdates?offset=" + (lastUpdateId + 1));    
+            var data = await res.json();    
             if (data.ok && data.result.length > 0) {    
-                data.result.forEach(update => {    
+                data.result.forEach(function(update) {    
                     lastUpdateId = update.update_id;    
-                    const msg = update.message;    
+                    var msg = update.message;    
                     if (msg && msg.text && String(msg.chat.id) === CONFIG.TELE_CHAT_ID) {    
-                        const parts = msg.text.trim().split(/\s+/);    
+                        var parts = msg.text.trim().split(/\s+/);    
                         if (parts[0].toUpperCase() === 'DUYET' && parts.length === 3) {    
                             processAutoDeposit(parts[1], parseInt(parts[2]));    
                         }    
@@ -372,8 +370,11 @@
     }    
     
     function processAutoDeposit(refCode, amount) {    
-        let db = getDB();    
-        const uIdx = db.users.findIndex(u => u.ref.toUpperCase() === refCode.toUpperCase());    
+        var db = getDB();    
+        var uIdx = -1;
+        for(var i=0; i<db.users.length; i++) {
+            if(db.users[i].ref.toUpperCase() === refCode.toUpperCase()) { uIdx = i; break; }
+        }
         if (uIdx !== -1) {    
             db.users[uIdx].bal += amount;    
             saveDB(db);    
@@ -388,9 +389,11 @@
     
     window.onload = function() {    
         if (sessionStorage.getItem('isLoggedIn')) {    
-            const db = getDB();    
-            const activeU = JSON.parse(sessionStorage.getItem('activeUser'));    
-            currentUser = db.users.find(u => u.u === activeU.u);    
+            var db = getDB();    
+            var activeU = JSON.parse(sessionStorage.getItem('activeUser'));
+            for(var i=0; i<db.users.length; i++) {
+                if(db.users[i].u === activeU.u) { currentUser = db.users[i]; break; }
+            }
             if(currentUser) {    
                 document.getElementById('main-nav').classList.remove('hidden');    
                 changeBox('portal');    
@@ -401,56 +404,60 @@
     };    
     
     function showSuccess(msg, cb) {    
-        const s = document.getElementById('success-screen');    
-        const lp = document.getElementById('loading-part');    
-        const cp = document.getElementById('check-part');    
-        const pr = document.getElementById('progress-line');    
+        var s = document.getElementById('success-screen');    
+        var lp = document.getElementById('loading-part');    
+        var cp = document.getElementById('check-part');    
+        var pr = document.getElementById('progress-line');    
         document.getElementById('success-text').innerText = msg;    
         s.style.display = 'flex';    
         lp.classList.remove('hidden'); cp.classList.add('hidden');    
         pr.style.width = '0%';    
-        let prog = 0;    
-        let iv = setInterval(() => {    
+        var prog = 0;    
+        var iv = setInterval(function() {    
             prog += 2; pr.style.width = prog + '%';    
             if(prog >= 100) {    
                 clearInterval(iv);    
                 lp.classList.add('hidden'); cp.classList.remove('hidden');    
                 startFireworks();    
-                setTimeout(() => { s.style.display = 'none'; if(cb) cb(); }, 2000);    
+                setTimeout(function() { s.style.display = 'none'; if(cb) cb(); }, 2000);    
             }    
         }, 30);    
     }    
     
     function changeBox(id) {    
-        document.querySelectorAll('[id^="box-"]').forEach(b => b.classList.add('hidden'));    
-        const target = document.getElementById('box-' + id);    
+        var boxes = document.querySelectorAll('[id^="box-"]');
+        for(var i=0; i<boxes.length; i++) boxes[i].classList.add('hidden');
+        var target = document.getElementById('box-' + id);    
         if(target) target.classList.remove('hidden');    
         if(id === 'portal') refreshPortal();    
-        if(id === 'info') renderInfoBox(); // MỚI: Gọi hàm render thông tin
+        if(id === 'info') renderInfoBox(); 
         if(id === 'nap') {    
             document.getElementById('ref-id').innerText = currentUser.ref;    
-            document.getElementById('qr-code').src = `https://img.vietqr.io/image/${CONFIG.BANK}-${CONFIG.STK}-compact.png?addInfo=${currentUser.ref}`;    
+            document.getElementById('qr-code').src = "https://img.vietqr.io/image/" + CONFIG.BANK + "-" + CONFIG.STK + "-compact.png?addInfo=" + currentUser.ref;    
         }    
     }    
     
     function setActiveNav(el) {    
-        document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));    
+        var items = document.querySelectorAll('.nav-item');
+        for(var i=0; i<items.length; i++) items[i].classList.remove('active');
         if(!el.classList.contains('nav-center')) el.classList.add('active');    
     }    
     
     function doReg() {    
-        const u = document.getElementById('r-u').value.trim().toUpperCase();    
-        const p = document.getElementById('r-p').value;    
-        const email = document.getElementById('r-email').value.trim();
-        const phone = document.getElementById('r-phone').value.trim();
-        const tos = document.getElementById('tos-check').checked;    
+        var u = document.getElementById('r-u').value.trim().toUpperCase();    
+        var p = document.getElementById('r-p').value;    
+        var email = document.getElementById('r-email').value.trim();
+        var phone = document.getElementById('r-phone').value.trim();
+        var tos = document.getElementById('tos-check').checked;    
         if(!tos) return alert("Vui lòng đồng ý với điều khoản sử dụng!");    
         if(u.length < 4) return alert("Tên đăng nhập quá ngắn!");    
-        let db = getDB();    
-        if(db.users.find(x => x.u === u)) return alert("Tài khoản đã tồn tại");    
-        const newUser = { u, p, email, phone, bal: 0, ref: "NAPTIEN" + Math.floor(1000 + Math.random()*8999), hsd: null, boughtKeys: [] };    
+        var db = getDB();    
+        for(var i=0; i<db.users.length; i++) {
+            if(db.users[i].u === u) return alert("Tài khoản đã tồn tại");
+        }
+        var newUser = { u:u, p:p, email:email, phone:phone, bal: 0, ref: "NAPTIEN" + Math.floor(1000 + Math.random()*8999), hsd: null, boughtKeys: [] };    
         db.users.push(newUser); saveDB(db);    
-        showSuccess("ĐĂNG KÝ THÀNH CÔNG", () => {    
+        showSuccess("ĐĂNG KÝ THÀNH CÔNG", function() {    
             currentUser = newUser;    
             sessionStorage.setItem('isLoggedIn', 'true');    
             sessionStorage.setItem('activeUser', JSON.stringify(newUser));    
@@ -460,36 +467,42 @@
     }    
     
     function doLogin() {    
-        const u = document.getElementById('u').value.trim().toUpperCase();    
-        const p = document.getElementById('p').value;    
-        const err = document.getElementById('login-error');    
-        let db = getDB();    
-        const f = db.users.find(x => x.u === u && x.p === p);    
+        var u = document.getElementById('u').value.trim().toUpperCase();    
+        var p = document.getElementById('p').value;    
+        var err = document.getElementById('login-error');    
+        var db = getDB();    
+        var f = null;
+        for(var i=0; i<db.users.length; i++) {
+            if(db.users[i].u === u && db.users[i].p === p) { f = db.users[i]; break; }
+        }
         if(f) {    
             err.style.display = 'none';    
             currentUser = f;    
             sessionStorage.setItem('isLoggedIn', 'true');    
             sessionStorage.setItem('activeUser', JSON.stringify(f));    
             document.getElementById('main-nav').classList.remove('hidden');    
-            showSuccess("ĐĂNG NHẬP THÀNH CÔNG", () => navigateTo('portal'));    
+            showSuccess("ĐĂNG NHẬP THÀNH CÔNG", function() { navigateTo('portal'); });    
         } else {    
             err.style.display = 'block';    
-            setTimeout(() => { err.style.display = 'none'; }, 3000);    
+            setTimeout(function() { err.style.display = 'none'; }, 3000);    
         }    
     }    
     
     function refreshPortal() {    
-        const db = getDB();    
-        currentUser = db.users.find(u => u.u === currentUser.u);    
+        var db = getDB();    
+        for(var i=0; i<db.users.length; i++) {
+            if(db.users[i].u === currentUser.u) { currentUser = db.users[i]; break; }
+        }
         document.getElementById('portal-user').innerText = "HI, " + currentUser.u;    
         document.getElementById('portal-bal').innerText = currentUser.bal.toLocaleString() + " đ";    
         document.getElementById('portal-ref').innerText = currentUser.ref;    
     }
 
-    // MỚI: HÀM HIỂN THỊ BOX THÔNG TIN
     function renderInfoBox() {
-        const db = getDB();
-        currentUser = db.users.find(u => u.u === currentUser.u);
+        var db = getDB();
+        for(var i=0; i<db.users.length; i++) {
+            if(db.users[i].u === currentUser.u) { currentUser = db.users[i]; break; }
+        }
         
         document.getElementById('info-u').innerText = currentUser.u;
         document.getElementById('info-phone').innerText = currentUser.phone || "Chưa cập nhật";
@@ -498,30 +511,29 @@
         document.getElementById('info-hsd').innerText = (currentUser.hsd && currentUser.hsd > Date.now()) ? 
             (currentUser.hsd > 2000000000000 ? "VĨNH VIỄN" : new Date(currentUser.hsd).toLocaleDateString()) : "Chưa kích hoạt";
 
-        const list = document.getElementById('info-key-list');
+        var list = document.getElementById('info-key-list');
         if(!currentUser.boughtKeys || currentUser.boughtKeys.length === 0) {
-            list.innerHTML = `<p class="text-[9px] text-center text-gray-600 mt-2">Chưa có lịch sử giao dịch</p>`;
+            list.innerHTML = '<p class="text-[9px] text-center text-gray-600 mt-2">Chưa có lịch sử giao dịch</p>';
         } else {
-            list.innerHTML = currentUser.boughtKeys.map(k => `
-                <div class="key-history-item flex justify-between items-center">
-                    <div>
-                        <p class="text-[10px] font-bold text-cyan-400">${k.key}</p>
-                        <p class="text-[8px] text-gray-500 uppercase">Gói: ${k.name}</p>
-                    </div>
-                    <span class="text-[9px] text-gray-400">${k.date}</span>
-                </div>
-            `).reverse().join('');
+            var html = '';
+            for(var j=currentUser.boughtKeys.length-1; j>=0; j--) {
+                var k = currentUser.boughtKeys[j];
+                html += '<div class="key-history-item flex justify-between items-center">' +
+                        '<div><p class="text-[10px] font-bold text-cyan-400">' + k.key + '</p>' +
+                        '<p class="text-[8px] text-gray-500 uppercase">Gói: ' + k.name + '</p></div>' +
+                        '<span class="text-[9px] text-gray-400">' + k.date + '</span></div>';
+            }
+            list.innerHTML = html;
         }
     }
 
-    // MỚI: HÀM ĐỔI MẬT KHẨU
     function changePass() {
-        const newP = document.getElementById('new-p').value;
+        var newP = document.getElementById('new-p').value;
         if(newP.length < 6) return alert("Mật khẩu mới phải từ 6 ký tự!");
-        
-        let db = getDB();
-        const uIdx = db.users.findIndex(u => u.u === currentUser.u);
-        db.users[uIdx].p = newP;
+        var db = getDB();
+        for(var i=0; i<db.users.length; i++) {
+            if(db.users[i].u === currentUser.u) { db.users[i].p = newP; break; }
+        }
         saveDB(db);
         currentUser.p = newP;
         document.getElementById('new-p').value = "";
@@ -529,13 +541,13 @@
     }
     
     function confirmBuy(price, days, name) {    
-        const modal = document.getElementById('buy-confirm-modal');    
+        var modal = document.getElementById('buy-confirm-modal');    
         document.getElementById('confirm-pkg-name').innerText = "Gói " + name;    
         document.getElementById('confirm-pkg-price').innerText = price.toLocaleString() + " VNĐ";    
         modal.style.display = 'flex';    
-        document.getElementById('final-buy-btn').onclick = () => {    
+        document.getElementById('final-buy-btn').onclick = function() {    
             modal.style.display = 'none';    
-            buyKey(price, days, name); // Thêm name vào đây
+            buyKey(price, days, name);
         };    
     }    
     
@@ -544,14 +556,16 @@
     }    
     
     function buyKey(price, days, name) {    
-        let db = getDB();    
-        const uIdx = db.users.findIndex(u => u.u === currentUser.u);    
+        var db = getDB();    
+        var uIdx = -1;
+        for(var i=0; i<db.users.length; i++) {
+            if(db.users[i].u === currentUser.u) { uIdx = i; break; }
+        }
         if(db.users[uIdx].bal < price) return alert("Số dư không đủ, vui lòng nạp thêm!");    
         
         db.users[uIdx].bal -= price;    
-        const key = "VIP-" + Math.random().toString(36).substring(5).toUpperCase();    
+        var key = "VIP-" + Math.random().toString(36).substring(5).toUpperCase();    
         
-        // Lưu lịch sử mua vào user
         if(!db.users[uIdx].boughtKeys) db.users[uIdx].boughtKeys = [];
         db.users[uIdx].boughtKeys.push({
             key: key,
@@ -559,9 +573,9 @@
             date: new Date().toLocaleDateString('vi-VN')
         });
 
-        db.keys.push({ key, days, used: false });    
+        db.keys.push({ key: key, days: days, used: false });    
         saveDB(db);    
-        showSuccess("MUA KEY THÀNH CÔNG", () => {    
+        showSuccess("MUA KEY THÀNH CÔNG", function() {    
             prompt("KEY VIP CỦA BẠN (HÃY LƯU LẠI):", key);    
             refreshPortal();    
         });    
@@ -582,33 +596,40 @@
     }    
     
     function activateLicense() {    
-        const kv = document.getElementById('key-input').value.trim().toUpperCase();    
-        let db = getDB();    
-        const kIdx = db.keys.findIndex(k => k.key === kv && !k.used);    
+        var kv = document.getElementById('key-input').value.trim().toUpperCase();    
+        var db = getDB();    
+        var kIdx = -1;
+        for(var i=0; i<db.keys.length; i++) {
+            if(db.keys[i].key === kv && !db.keys[i].used) { kIdx = i; break; }
+        }
         if(kIdx === -1) return alert("Key không hợp lệ!");    
-        const uIdx = db.users.findIndex(u => u.u === currentUser.u);    
-        const addTime = db.keys[kIdx].days * 86400000;    
+        var uIdx = -1;
+        for(var j=0; j<db.users.length; j++) {
+            if(db.users[j].u === currentUser.u) { uIdx = j; break; }
+        }
+        var addTime = db.keys[kIdx].days * 86400000;    
         db.users[uIdx].hsd = (db.users[uIdx].hsd > Date.now() ? db.users[uIdx].hsd : Date.now()) + addTime;    
         db.keys[kIdx].used = true;    
         saveDB(db);    
-        showSuccess("KÍCH HOẠT VIP", () => checkToolAccess());    
+        showSuccess("KÍCH HOẠT VIP", function() { checkToolAccess(); });    
     }    
     
     function runAnalysis() {    
-        const input = document.getElementById('md5-input').value.trim();    
+        var input = document.getElementById('md5-input').value.trim();    
         if(input.length < 10) return alert("Mã MD5 không hợp lệ!");    
-        const btn = document.getElementById('ana-btn');    
+        var btn = document.getElementById('ana-btn');    
         btn.innerText = "ĐANG PHÂN TÍCH..."; btn.disabled = true;    
-        setTimeout(() => {    
-            const charSum = input.split('').reduce((a, b) => a + b.charCodeAt(0), 0);    
-            const isTai = (charSum + Math.floor(Math.random() * 100)) % 2 === 0;    
-            const accuracy = (97 + (Math.random() * 2.9)).toFixed(1);    
-            const v = document.getElementById('res-val');    
+        setTimeout(function() {    
+            var charSum = 0;
+            for(var i=0; i<input.length; i++) charSum += input.charCodeAt(i);
+            var isTai = (charSum + Math.floor(Math.random() * 100)) % 2 === 0;    
+            var accuracy = (97 + (Math.random() * 2.9)).toFixed(1);    
+            var v = document.getElementById('res-val');    
             v.innerText = isTai ? "TÀI" : "XỈU";    
-            v.className = `font-black text-7xl italic py-2 animate__animated animate__bounceIn ${isTai ? 'text-cyan-400' : 'text-red-500'}`;    
+            v.className = "font-black text-7xl italic py-2 animate__animated animate__bounceIn " + (isTai ? 'text-cyan-400' : 'text-red-500');    
             document.getElementById('res-acc').innerText = "ĐỘ CHÍNH XÁC: " + accuracy + "%";    
             document.getElementById('res-display').classList.remove('hidden');    
-            const db = getDB();    
+            var db = getDB();    
             db.history.unshift({    
                 md5: input.substring(0, 10) + "...",    
                 res: isTai ? "TÀI" : "XỈU",    
@@ -622,121 +643,96 @@
     }    
     
     function renderHistory() {    
-        const db = getDB();    
-        const list = document.getElementById('session-history-list');    
-        list.innerHTML = db.history.map(item => `    
-            <div class="session-item">    
-                <span class="text-gray-400 font-bold">${item.md5}</span>    
-                <span class="${item.res === 'TÀI' ? 'text-cyan-400' : 'text-red-500'} font-black">${item.res}</span>    
-                <span class="text-yellow-500">${item.acc}</span>    
-                <span class="text-gray-600">${item.time}</span>    
-            </div>    
-        `).join('');    
+        var db = getDB();    
+        var list = document.getElementById('session-history-list');    
+        var html = '';
+        for(var i=0; i<db.history.length; i++) {
+            var item = db.history[i];
+            html += '<div class="session-item">' +
+                    '<span class="text-gray-400 font-bold">' + item.md5 + '</span>' +
+                    '<span class="' + (item.res === 'TÀI' ? 'text-cyan-400' : 'text-red-500') + ' font-black">' + item.res + '</span>' +
+                    '<span class="text-yellow-500">' + item.acc + '</span>' +
+                    '<span class="text-gray-600">' + item.time + '</span></div>';
+        }
+        list.innerHTML = html;
     }    
     
     async function sendNapTele() {    
-        const amt = document.getElementById('nap-amount').value;    
+        var amt = document.getElementById('nap-amount').value;    
         if(amt < 10000) return alert("Nạp tối thiểu 10,000đ");    
-        const text = `💰 NẠP TIỀN\n👤 User: ${currentUser.u}\n🆔 Mã: ${currentUser.ref}\n💵 Số tiền: ${parseInt(amt).toLocaleString()}đ\n\nDUYET ${currentUser.ref} ${amt}`;    
-        await fetch(`https://api.telegram.org/bot${CONFIG.TELE_TOKEN}/sendMessage?chat_id=${CONFIG.TELE_CHAT_ID}&text=${encodeURIComponent(text)}`);    
+        var text = "💰 NẠP TIỀN\n👤 User: " + currentUser.u + "\n🆔 Mã: " + currentUser.ref + "\n💵 Số tiền: " + parseInt(amt).toLocaleString() + "đ\n\nDUYET " + currentUser.ref + " " + amt;    
+        await fetch("https://api.telegram.org/bot" + CONFIG.TELE_TOKEN + "/sendMessage?chat_id=" + CONFIG.TELE_CHAT_ID + "&text=" + encodeURIComponent(text));    
         alert("Yêu cầu đã gửi! Vui lòng chờ 1-3 phút.");    
     }    
     
-    // MỚI: PHÁO HOA 7 MÀU 120 FPS BẮN TỪ DƯỚI LÊN  
     function startFireworks() {  
-        const canvas = document.getElementById('fireworks');  
-        const ctx = canvas.getContext('2d');  
-        canvas.width = window.innerWidth;  
-        canvas.height = window.innerHeight;  
-          
-        let particles = [];  
-        let rockets = [];  
-        const colors = ['#FF0000', '#FF7F00', '#FFFF00', '#00FF00', '#0000FF', '#4B0082', '#9400D3'];  
+        var canvas = document.getElementById('fireworks');  
+        var ctx = canvas.getContext('2d');  
+        canvas.width = window.innerWidth; canvas.height = window.innerHeight;  
+        var particles = []; var rockets = [];  
+        var colors = ['#FF0000', '#FF7F00', '#FFFF00', '#00FF00', '#0000FF', '#4B0082', '#9400D3'];  
   
-        class Rocket {  
-            constructor() {  
-                this.x = Math.random() * canvas.width;  
-                this.y = canvas.height;  
-                this.v = Math.random() * 4 + 10;  
-                this.targetY = Math.random() * (canvas.height / 2);  
-                this.color = colors[Math.floor(Math.random() * colors.length)];  
-            }  
-            update() {  
-                this.y -= this.v;  
-                if (this.y <= this.targetY) {  
-                    this.explode();  
-                    return false;  
-                }  
-                return true;  
-            }  
-            draw() {  
-                ctx.fillStyle = this.color;  
-                ctx.beginPath();  
-                ctx.arc(this.x, this.y, 2.5, 0, Math.PI * 2);  
-                ctx.fill();  
-            }  
-            explode() {  
-                for (let i = 0; i < 60; i++) {  
-                    particles.push(new Particle(this.x, this.y, this.color));  
-                }  
-            }  
+        function Rocket() {  
+            this.x = Math.random() * canvas.width;  
+            this.y = canvas.height;  
+            this.v = Math.random() * 4 + 10;  
+            this.targetY = Math.random() * (canvas.height / 2);  
+            this.color = colors[Math.floor(Math.random() * colors.length)];  
         }  
+        Rocket.prototype.update = function() {  
+            this.y -= this.v;  
+            if (this.y <= this.targetY) { this.explode(); return false; }  
+            return true;  
+        };  
+        Rocket.prototype.draw = function() {  
+            ctx.fillStyle = this.color; ctx.beginPath(); ctx.arc(this.x, this.y, 2.5, 0, Math.PI * 2); ctx.fill();  
+        };  
+        Rocket.prototype.explode = function() {  
+            for (var i = 0; i < 60; i++) particles.push(new Particle(this.x, this.y, this.color));  
+        };  
   
-        class Particle {  
-            constructor(x, y, color) {  
-                this.x = x; this.y = y;  
-                this.color = color;  
-                this.angle = Math.random() * Math.PI * 2;  
-                this.speed = Math.random() * 6 + 2;  
-                this.friction = 0.95;  
-                this.gravity = 0.15;  
-                this.alpha = 1;  
-                this.decay = Math.random() * 0.015 + 0.015;  
-            }  
-            update() {  
-                this.speed *= this.friction;  
-                this.x += Math.cos(this.angle) * this.speed;  
-                this.y += Math.sin(this.angle) * this.speed + this.gravity;  
-                this.alpha -= this.decay;  
-            }  
-            draw() {  
-                ctx.globalAlpha = this.alpha;  
-                ctx.fillStyle = this.color;  
-                ctx.beginPath();  
-                ctx.arc(this.x, this.y, 2, 0, Math.PI * 2);  
-                ctx.fill();  
-            }  
+        function Particle(x, y, color) {  
+            this.x = x; this.y = y; this.color = color;  
+            this.angle = Math.random() * Math.PI * 2;  
+            this.speed = Math.random() * 6 + 2;  
+            this.friction = 0.95; this.gravity = 0.15; this.alpha = 1;  
+            this.decay = Math.random() * 0.015 + 0.015;  
         }  
+        Particle.prototype.update = function() {  
+            this.speed *= this.friction;  
+            this.x += Math.cos(this.angle) * this.speed;  
+            this.y += Math.sin(this.angle) * this.speed + this.gravity;  
+            this.alpha -= this.decay;  
+        };  
+        Particle.prototype.draw = function() {  
+            ctx.globalAlpha = this.alpha; ctx.fillStyle = this.color;  
+            ctx.beginPath(); ctx.arc(this.x, this.y, 2, 0, Math.PI * 2); ctx.fill();  
+        };  
   
-        for(let i=0; i<4; i++) rockets.push(new Rocket());  
+        for(var i=0; i<4; i++) rockets.push(new Rocket());  
   
         function loop() {  
             ctx.clearRect(0, 0, canvas.width, canvas.height);  
-            rockets = rockets.filter(r => {  
-                r.update();  
-                r.draw();  
-                return r.y > r.targetY;  
-            });  
-            particles.forEach((p, i) => {  
-                p.update();  
-                p.draw();  
-                if (p.alpha <= 0) particles.splice(i, 1);  
-            });  
+            rockets = rockets.filter(function(r) { r.draw(); return r.update(); });  
+            for(var i=particles.length-1; i>=0; i--) {
+                particles[i].update(); particles[i].draw();
+                if(particles[i].alpha <= 0) particles.splice(i, 1);
+            }
             if (rockets.length > 0 || particles.length > 0) requestAnimationFrame(loop);  
         }  
         loop();  
     }    
     
     function initBg() {    
-        const canvas = document.getElementById('bg-canvas');    
-        const ctx = canvas.getContext('2d');    
+        var canvas = document.getElementById('bg-canvas');    
+        var ctx = canvas.getContext('2d');    
         canvas.width = window.innerWidth; canvas.height = window.innerHeight;    
-        let particles = [];    
-        for(let i=0; i<40; i++) particles.push({x:Math.random()*canvas.width, y:Math.random()*canvas.height, r:Math.random()*2, s:Math.random()*0.5});    
+        var particles = [];    
+        for(var i=0; i<40; i++) particles.push({x:Math.random()*canvas.width, y:Math.random()*canvas.height, r:Math.random()*2, s:Math.random()*0.5});    
         function draw() {    
             ctx.clearRect(0,0,canvas.width,canvas.height);    
             ctx.fillStyle = "rgba(0, 242, 255, 0.3)";    
-            particles.forEach(p => {    
+            particles.forEach(function(p) {    
                 ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI*2); ctx.fill();    
                 p.y -= p.s; if(p.y < -10) p.y = canvas.height + 10;    
             });    
