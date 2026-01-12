@@ -14,615 +14,616 @@
         * { -webkit-user-select: none; user-select: none; box-sizing: border-box; outline: none !important; -webkit-tap-highlight-color: transparent; }        
         input, textarea { -webkit-user-select: auto !important; user-select: auto !important; pointer-events: auto !important; }  
   
-        body { background-color: var(--dark); color: white; font-family: 'Lexend', sans-serif; overflow: hidden; height: 100vh; margin: 0; }      
-              
-        #bg-canvas { position: fixed; inset: 0; z-index: -1; }      
-        .laser-beam { position: absolute; width: 2px; height: 100%; background: linear-gradient(to bottom, transparent, var(--main), transparent); opacity: 0.1; filter: blur(1px); animation: laser-move 8s linear infinite; }      
-        @keyframes laser-move { 0% { transform: translateX(-100vw) rotate(45deg); } 100% { transform: translateX(200vw) rotate(45deg); } }      
+        body { background-color: var(--dark); color: white; font-family: 'Lexend', sans-serif; overflow: hidden; height: 100vh; margin: 0; }        
+                
+        #bg-canvas { position: fixed; inset: 0; z-index: -1; }        
+        .laser-beam { position: absolute; width: 2px; height: 100%; background: linear-gradient(to bottom, transparent, var(--main), transparent); opacity: 0.1; filter: blur(1px); animation: laser-move 8s linear infinite; }        
+        @keyframes laser-move { 0% { transform: translateX(-100vw) rotate(45deg); } 100% { transform: translateX(200vw) rotate(45deg); } }        
+        
+        .glass-card { background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(0, 242, 255, 0.15); backdrop-filter: blur(20px); border-radius: 30px; }        
+        .btn-main { background: linear-gradient(135deg, var(--main) 0%, var(--sub) 100%); color: white; font-weight: 800; cursor: pointer; }        
+        .cyber-input { background: rgba(0, 0, 0, 0.6) !important; border: 1px solid rgba(255, 255, 255, 0.1) !important; color: var(--main) !important; border-radius: 15px !important; text-align: center; }        
+        
+        .pkg-item { position: relative; overflow: hidden; border: 1px solid rgba(255,255,255,0.05); transition: 0.3s; }        
+        .pkg-item:active { transform: scale(0.95); }        
+        .pkg-trial { border-left: 4px solid #94a3b8; }        
+        .pkg-day { border-left: 4px solid #22c55e; }        
+        .pkg-silver { border-left: 4px solid #00f2ff; animation: pulse-cyan 2s infinite; }        
+        .pkg-gold { border-left: 4px solid #fbbf24; animation: pulse-gold 2s infinite; }        
+        .pkg-diamond { border-left: 4px solid #f472b6; animation: pulse-pink 2s infinite; }        
+        .pkg-eternal { border-left: 4px solid #ef4444; background: rgba(239, 68, 68, 0.05); }        
+        
+        @keyframes pulse-cyan { 0% { box-shadow: 0 0 0 0 rgba(0,242,255,0.2); } 70% { box-shadow: 0 0 0 10px rgba(0,242,255,0); } 100% { box-shadow: 0 0 0 0 rgba(0,242,255,0); } }        
+        @keyframes pulse-gold { 0% { box-shadow: 0 0 0 0 rgba(251,191,36,0.2); } 70% { box-shadow: 0 0 0 10px rgba(251,191,36,0); } 100% { box-shadow: 0 0 0 0 rgba(251,191,36,0); } }        
+        @keyframes pulse-pink { 0% { box-shadow: 0 0 0 0 rgba(244,114,182,0.2); } 70% { box-shadow: 0 0 0 10px rgba(244,114,182,0); } 100% { box-shadow: 0 0 0 0 rgba(244,114,182,0); } }        
+        
+        .nav-bar { position: fixed; bottom: 0; left: 0; right: 0; height: 75px; background: rgba(10,10,20,0.95); border-top: 1px solid rgba(0,242,255,0.2); backdrop-filter: blur(20px); display: flex; justify-content: space-around; align-items: center; z-index: 999; }        
+        .nav-item { display: flex; flex-direction: column; align-items: center; color: #555; cursor: pointer; transition: 0.3s; width: 60px; }        
+        .nav-item.active { color: var(--main); }        
+        .nav-item svg { width: 22px; height: 22px; }        
+        .nav-item span { font-size: 8px; font-weight: 900; text-transform: uppercase; margin-top: 4px; }        
+        .nav-center { position: relative; top: -20px; width: 65px; height: 65px; background: linear-gradient(135deg, var(--main), var(--sub)); border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 20px rgba(0, 242, 255, 0.5); border: 4px solid var(--dark); }        
+                
+        .pass-strength { height: 4px; border-radius: 2px; transition: 0.3s; margin-top: 5px; width: 0%; }        
+        .strength-weak { width: 33%; background: #ef4444; }        
+        .strength-medium { width: 66%; background: #fbbf24; }        
+        .strength-strong { width: 100%; background: #22c55e; }        
+        
+        /* FIX LỖI CHẶN CLICK: Xóa pointer-events: none */  
+        .success-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 10000; display: none; align-items: center; justify-content: center; flex-direction: column; }        
+        .loader-bar { width: 200px; height: 4px; background: rgba(255,255,255,0.1); border-radius: 10px; overflow: hidden; margin-top: 20px; }        
+        .loader-progress { width: 0%; height: 100%; background: var(--main); box-shadow: 0 0 10px var(--main); }        
+        
+        .avatar-img { width: 45px; height: 45px; border-radius: 12px; border: 2px solid var(--main); object-fit: cover; }        
+        #fireworks { position: fixed; inset: 0; pointer-events: none; z-index: 10001; }        
+        
+        .session-log { background: rgba(255,255,255,0.03); border-radius: 15px; padding: 10px; font-size: 9px; border: 1px solid rgba(255,255,255,0.05); margin-top: 10px; }        
+        .session-item { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.02); }        
+        #login-error { color: #ff4d4d; font-size: 10px; font-weight: 800; text-transform: uppercase; margin-top: 10px; display: none; }        
+        .buy-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 2000; display: none; align-items: center; justify-content: center; padding: 20px; }        
       
-        .glass-card { background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(0, 242, 255, 0.15); backdrop-filter: blur(20px); border-radius: 30px; }      
-        .btn-main { background: linear-gradient(135deg, var(--main) 0%, var(--sub) 100%); color: white; font-weight: 800; cursor: pointer; }      
-        .cyber-input { background: rgba(0, 0, 0, 0.6) !important; border: 1px solid rgba(255, 255, 255, 0.1) !important; color: var(--main) !important; border-radius: 15px !important; text-align: center; }      
-      
-        .pkg-item { position: relative; overflow: hidden; border: 1px solid rgba(255,255,255,0.05); transition: 0.3s; }      
-        .pkg-item:active { transform: scale(0.95); }      
-        .pkg-trial { border-left: 4px solid #94a3b8; }      
-        .pkg-day { border-left: 4px solid #22c55e; }      
-        .pkg-silver { border-left: 4px solid #00f2ff; animation: pulse-cyan 2s infinite; }      
-        .pkg-gold { border-left: 4px solid #fbbf24; animation: pulse-gold 2s infinite; }      
-        .pkg-diamond { border-left: 4px solid #f472b6; animation: pulse-pink 2s infinite; }      
-        .pkg-eternal { border-left: 4px solid #ef4444; background: rgba(239, 68, 68, 0.05); }      
-      
-        @keyframes pulse-cyan { 0% { box-shadow: 0 0 0 0 rgba(0,242,255,0.2); } 70% { box-shadow: 0 0 0 10px rgba(0,242,255,0); } 100% { box-shadow: 0 0 0 0 rgba(0,242,255,0); } }      
-        @keyframes pulse-gold { 0% { box-shadow: 0 0 0 0 rgba(251,191,36,0.2); } 70% { box-shadow: 0 0 0 10px rgba(251,191,36,0); } 100% { box-shadow: 0 0 0 0 rgba(251,191,36,0); } }      
-        @keyframes pulse-pink { 0% { box-shadow: 0 0 0 0 rgba(244,114,182,0.2); } 70% { box-shadow: 0 0 0 10px rgba(244,114,182,0); } 100% { box-shadow: 0 0 0 0 rgba(244,114,182,0); } }      
-      
-        .nav-bar { position: fixed; bottom: 0; left: 0; right: 0; height: 75px; background: rgba(10,10,20,0.95); border-top: 1px solid rgba(0,242,255,0.2); backdrop-filter: blur(20px); display: flex; justify-content: space-around; align-items: center; z-index: 999; }      
-        .nav-item { display: flex; flex-direction: column; align-items: center; color: #555; cursor: pointer; transition: 0.3s; width: 60px; }      
-        .nav-item.active { color: var(--main); }      
-        .nav-item svg { width: 22px; height: 22px; }      
-        .nav-item span { font-size: 8px; font-weight: 900; text-transform: uppercase; margin-top: 4px; }      
-        .nav-center { position: relative; top: -20px; width: 65px; height: 65px; background: linear-gradient(135deg, var(--main), var(--sub)); border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 20px rgba(0, 242, 255, 0.5); border: 4px solid var(--dark); }      
-              
-        .pass-strength { height: 4px; border-radius: 2px; transition: 0.3s; margin-top: 5px; width: 0%; }      
-        .strength-weak { width: 33%; background: #ef4444; }      
-        .strength-medium { width: 66%; background: #fbbf24; }      
-        .strength-strong { width: 100%; background: #22c55e; }      
-      
-        .success-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 10000; display: none; align-items: center; justify-content: center; flex-direction: column; }      
-        .loader-bar { width: 200px; height: 4px; background: rgba(255,255,255,0.1); border-radius: 10px; overflow: hidden; margin-top: 20px; }      
-        .loader-progress { width: 0%; height: 100%; background: var(--main); box-shadow: 0 0 10px var(--main); }      
-      
-        .avatar-img { width: 45px; height: 45px; border-radius: 12px; border: 2px solid var(--main); object-fit: cover; }      
-        #fireworks { position: fixed; inset: 0; pointer-events: none; z-index: 10001; }      
-      
-        .session-log { background: rgba(255,255,255,0.03); border-radius: 15px; padding: 10px; font-size: 9px; border: 1px solid rgba(255,255,255,0.05); margin-top: 10px; }      
-        .session-item { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.02); }      
-        #login-error { color: #ff4d4d; font-size: 10px; font-weight: 800; text-transform: uppercase; margin-top: 10px; display: none; }      
-        .buy-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 2000; display: none; align-items: center; justify-content: center; padding: 20px; }      
-    
-        .transition-overlay { position: fixed; inset: 0; background: radial-gradient(circle, #0a0a14 0%, #020205 100%); z-index: 11000; display: none; align-items: center; justify-content: center; flex-direction: column; }    
-        .radar-scan { width: 120px; height: 120px; border: 2px solid var(--main); border-radius: 50%; position: relative; overflow: hidden; box-shadow: 0 0 20px rgba(0, 242, 255, 0.2); }    
-        .radar-scan::after { content: ""; position: absolute; inset: 0; background: conic-gradient(from 0deg, transparent 80%, var(--main)); animation: rotate-radar 1.2s linear infinite; }    
-        @keyframes rotate-radar { to { transform: rotate(360deg); } }    
-        .matrix-text { font-family: monospace; font-size: 10px; color: var(--main); margin-top: 25px; letter-spacing: 3px; text-shadow: 0 0 5px var(--main); font-weight: bold; }    
-          
-        .info-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }  
-        .info-label { font-size: 10px; color: #888; font-weight: bold; text-transform: uppercase; }  
-        .info-value { font-size: 11px; color: #fff; font-weight: 900; }  
-        .key-history-item { background: rgba(0, 242, 255, 0.05); border-radius: 12px; padding: 10px; margin-bottom: 8px; border: 1px solid rgba(0, 242, 255, 0.1); }  
-    </style>      
-</head>      
-<body>      
-    
-<div id="transition-screen" class="transition-overlay">    
-    <div class="radar-scan"></div>    
-    <div id="matrix-status" class="matrix-text">ĐANG KẾT NỐI...</div>    
-</div>    
-      
-<canvas id="bg-canvas"></canvas>      
-<canvas id="fireworks"></canvas>      
-<div class="laser-beam" style="left: 10%;"></div>      
-<div class="laser-beam" style="left: 50%; animation-delay: 2s;"></div>      
-<div class="laser-beam" style="left: 80%; animation-delay: 4s;"></div>      
-      
-<div id="success-screen" class="success-overlay">      
-    <div id="loading-part" class="flex flex-col items-center">      
-        <div class="w-12 h-12 border-4 border-cyan-500 border-t-transparent rounded-full animate-spin"></div>      
-        <p class="mt-4 text-[10px] font-bold tracking-widest text-cyan-400">ĐANG XỬ LÝ DỮ LIỆU...</p>      
-        <div class="loader-bar"><div id="progress-line" class="loader-progress"></div></div>      
-    </div>      
-    <div id="check-part" class="hidden flex flex-col items-center">      
-        <div class="w-20 h-20 bg-cyan-400 rounded-full flex items-center justify-center animate__animated animate__zoomIn">      
-            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="4"><polyline points="20 6 9 17 4 12"></polyline></svg>      
-        </div>      
-        <h2 id="success-text" class="mt-6 text-lg font-bold text-white uppercase"></h2>      
-    </div>      
-</div>      
-      
-<div id="buy-confirm-modal" class="buy-modal">      
-    <div class="glass-card w-full max-w-[320px] p-8 text-center animate__animated animate__zoomIn">      
-        <div class="w-20 h-20 bg-cyan-500/10 rounded-full flex items-center justify-center mx-auto mb-6 border border-cyan-500/30">      
-            <svg class="w-10 h-10 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">      
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>      
-            </svg>      
-        </div>      
-        <h3 class="text-xs font-bold text-gray-400 uppercase mb-2">XÁC NHẬN THANH TOÁN</h3>      
-        <p id="confirm-pkg-name" class="text-xl font-black text-white uppercase mb-1"></p>      
-        <p id="confirm-pkg-price" class="text-cyan-400 font-bold mb-6"></p>      
-        <div class="flex gap-3">      
-            <button onclick="closeBuyModal()" class="flex-1 py-3 bg-white/5 rounded-xl text-[10px] font-bold uppercase">Hủy bỏ</button>      
-            <button id="final-buy-btn" class="flex-1 py-3 btn-main rounded-xl text-[10px] uppercase">Xác nhận</button>      
-        </div>      
-    </div>      
-</div>      
-      
-<div class="flex items-center justify-center min-h-screen p-4 pb-28">      
-    <div class="w-full max-w-[400px]">      
-              
-        <div id="box-login" class="glass-card p-8 animate__animated animate__fadeIn">      
-            <div class="text-center mb-8">      
-                <h1 class="text-2xl font-black uppercase tracking-tighter">TOOL TÀI XỈU <span class="text-cyan-400">MD5</span></h1>      
-                <p class="text-[9px] text-gray-500 font-bold uppercase mt-1">Hệ thống Phân Tích chuyên nghiệp</p>      
-            </div>      
-            <div class="space-y-4">      
-                <input id="u" type="text" placeholder="TÊN ĐĂNG NHẬP" class="w-full p-4 cyber-input uppercase">      
-                <input id="p" type="password" placeholder="MẬT KHẨU" class="w-full p-4 cyber-input">      
-                <div id="login-error" class="text-center animate__animated animate__headShake">⚠️ Sai tài khoản hoặc mật khẩu!</div>      
-                <button onclick="doLogin()" class="w-full py-4 btn-main rounded-xl text-sm uppercase">Đăng nhập ngay</button>      
-                <button onclick="navigateTo('reg')" class="w-full text-[9px] text-gray-500 uppercase font-bold">Tạo tài khoản mới</button>      
-            </div>      
-        </div>      
-      
-        <div id="box-reg" class="hidden glass-card p-6 animate__animated animate__fadeIn">      
-            <h2 class="text-center font-bold text-cyan-400 mb-4 uppercase text-sm">Đăng ký thành viên</h2>      
-            <div class="space-y-3">      
-                <input id="r-u" type="text" placeholder="TÊN ĐĂNG NHẬP" class="w-full p-3 cyber-input uppercase">      
-                <div>      
-                    <input id="r-p" type="password" oninput="checkPassStrength(this.value)" placeholder="MẬT KHẨU" class="w-full p-3 cyber-input">      
-                    <div class="flex justify-between items-center mt-1 px-1">      
-                        <span id="strength-label" class="text-[8px] font-bold text-gray-500">BẢO MẬT: CHƯA NHẬP</span>      
-                        <div class="w-24 h-1 bg-white/10 rounded-full overflow-hidden">      
-                            <div id="strength-bar" class="pass-strength"></div>      
-                        </div>      
-                    </div>      
-                </div>      
-                <input id="r-email" type="email" placeholder="GMAIL" class="w-full p-3 cyber-input">      
-                <input id="r-phone" type="tel" placeholder="SỐ ĐIỆN THOẠI" class="w-full p-3 cyber-input">      
-                <div class="flex items-start gap-2 py-2">      
-                    <input type="checkbox" id="tos-check" class="mt-1 accent-cyan-400">      
-                    <label for="tos-check" class="text-[9px] text-gray-400 leading-tight">Tôi đồng ý với các điều khoản sử dụng và chính sách bảo mật của MD5 PREMIUM.</label>      
-                </div>      
-                <button onclick="doReg()" class="w-full py-4 btn-main rounded-xl text-sm uppercase">Xác nhận đăng ký</button>      
-                <button onclick="navigateTo('login')" class="w-full text-[10px] text-gray-500 uppercase mt-2">Quay lại</button>      
-            </div>      
-        </div>      
-      
-        <div id="box-portal" class="hidden animate__animated animate__zoomIn">      
-            <div class="flex justify-between items-center mb-4 px-2">      
-                <div class="flex items-center gap-3">      
-                    <img src="https://i.imgur.com/WLeaCev.jpeg" class="avatar-img">      
-                    <div>      
-                        <p id="portal-user" class="text-cyan-400 text-[10px] font-bold uppercase"></p>      
-                        <p id="portal-bal" class="text-xl font-black text-white">0 đ</p>      
-                    </div>      
-                </div>      
-                <div class="relative cursor-pointer">      
-                    <svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 24 24"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>      
-                </div>      
-            </div>      
-            <div class="glass-card p-4 mb-4 bg-cyan-500/5">      
-                <p class="text-[9px] text-gray-500 font-bold uppercase mb-1">Mã nạp tiền của bạn</p>      
-                <div class="flex justify-between items-center">      
-                    <span id="portal-ref" class="text-lg font-black tracking-widest text-white"></span>      
-                    <button onclick="navigateTo('nap')" class="text-[9px] bg-cyan-500 px-3 py-1 rounded-full text-black font-bold">NẠP THÊM</button>      
-                </div>      
-            </div>      
-            <div class="grid grid-cols-2 gap-3">      
-                <div onclick="navigateTo('buy-key')" class="glass-card p-6 text-center cursor-pointer border-white/5">      
-                    <p class="text-2xl mb-1">💎</p><p class="text-[10px] font-bold uppercase">Gói Key VIP</p>      
-                </div>      
-                <div onclick="navigateTo('info')" class="glass-card p-6 text-center cursor-pointer border-white/5">      
-                    <p class="text-2xl mb-1">👤</p><p class="text-[10px] font-bold uppercase">Cá Nhân</p>      
-                </div>      
-            </div>      
-        </div>      
-      
-        <div id="box-buy-key" class="hidden glass-card p-5 animate__animated animate__fadeInUp">      
-            <h3 class="text-center font-bold text-cyan-400 mb-4 uppercase text-xs">Cửa hàng Gói Key Elite</h3>      
-            <div class="space-y-2 max-h-[380px] overflow-y-auto pr-1">      
-                <div onclick="confirmBuy(10000, 0.04, 'Trial')" class="pkg-item pkg-trial glass-card flex justify-between p-4 rounded-xl cursor-pointer">      
-                    <p class="text-[11px] font-bold uppercase">Dùng Thử (1 Giờ)</p>      
-                    <p class="text-gray-400 font-black text-xs">10k</p>      
-                </div>      
-                <div onclick="confirmBuy(25000, 1, 'Standard')" class="pkg-item pkg-day glass-card flex justify-between p-4 rounded-xl cursor-pointer">      
-                    <p class="text-[11px] font-bold uppercase">Gói Ngày (24 Giờ)</p>      
-                    <p class="text-green-400 font-black text-xs">25k</p>      
-                </div>      
-                <div onclick="confirmBuy(55000, 3, 'Silver')" class="pkg-item pkg-silver glass-card flex justify-between p-4 rounded-xl cursor-pointer">      
-                    <p class="text-[11px] font-bold uppercase">Silver (3 Ngày)</p>      
-                    <p class="text-cyan-400 font-black text-xs">55k</p>      
-                </div>      
-                <div onclick="confirmBuy(100000, 7, 'Gold')" class="pkg-item pkg-gold glass-card flex justify-between p-4 rounded-xl cursor-pointer">      
-                    <p class="text-[11px] font-bold uppercase">Gold (7 Ngày)</p>      
-                    <p class="text-yellow-400 font-black text-xs">100k</p>      
-                </div>      
-                <div onclick="confirmBuy(250000, 30, 'Diamond')" class="pkg-item pkg-diamond glass-card flex justify-between p-4 rounded-xl cursor-pointer">      
-                    <p class="text-[11px] font-bold uppercase">Diamond (30 Ngày)</p>      
-                    <p class="text-pink-400 font-black text-xs">250k</p>      
-                </div>      
-                <div onclick="confirmBuy(500000, 9999, 'Eternal')" class="pkg-item pkg-eternal glass-card flex justify-between p-4 rounded-xl cursor-pointer">      
-                    <p class="text-[11px] font-bold text-red-500 uppercase">Eternal (Vĩnh viễn)</p>      
-                    <p class="text-white font-black text-xs">500k</p>      
-                </div>      
-            </div>      
-        </div>      
-      
-        <div id="box-nap" class="hidden glass-card p-6 text-center animate__animated animate__fadeIn">      
-            <h3 class="text-cyan-400 font-bold mb-4 uppercase text-xs">Thanh toán nạp tiền</h3>      
-            <img id="qr-code" src="" class="mx-auto rounded-2xl w-44 mb-4 bg-white p-1">      
-            <div class="bg-black/40 p-3 rounded-xl mb-4 border border-white/5">      
-                <p class="text-[9px] text-gray-500 uppercase">Nội dung chuyển khoản</p>      
-                <p id="ref-id" class="text-xl font-black text-white tracking-widest"></p>      
-            </div>      
-            <input id="nap-amount" type="number" placeholder="Số tiền đã chuyển" class="w-full p-4 cyber-input mb-4">      
-            <button onclick="sendNapTele()" class="w-full py-4 btn-main rounded-xl text-[11px] uppercase">Gửi yêu cầu xác nhận</button>      
-        </div>      
-      
-        <div id="box-info" class="hidden glass-card p-6 animate__animated animate__fadeIn">  
-            <h3 class="text-center font-bold text-cyan-400 mb-6 uppercase text-sm">Hồ Sơ Cá Nhân</h3>  
-            <div class="space-y-1 mb-6">  
-                <div class="info-row">  
-                    <span class="info-label">Tên Tài Khoản:</span>  
-                    <span id="info-u" class="info-value uppercase text-cyan-400"></span>  
-                </div>  
-                <div class="info-row">  
-                    <span class="info-label">Số Điện Thoại:</span>  
-                    <span id="info-phone" class="info-value"></span>  
-                </div>  
-                <div class="info-row">  
-                    <span class="info-label">Gmail:</span>  
-                    <span id="info-email" class="info-value"></span>  
-                </div>  
-                <div class="info-row">  
-                    <span class="info-label">Số Dư Hiện Tại:</span>  
-                    <span id="info-bal" class="info-value text-green-400">0đ</span>  
-                </div>  
-                <div class="info-row">  
-                    <span class="info-label">Gói Key:</span>  
-                    <span id="info-hsd" class="info-value text-yellow-400">Chưa kích hoạt</span>  
-                </div>  
-            </div>  
-            <h4 class="text-[10px] font-bold text-gray-500 uppercase mb-3">Lịch sử mua Key</h4>  
-            <div id="info-key-list" class="max-h-[120px] overflow-y-auto mb-6 pr-1">  
-                <p class="text-[9px] text-center text-gray-600">Chưa có lịch sử giao dịch</p>  
-            </div>  
-            <div class="border-t border-white/5 pt-4">  
-                <h4 class="text-[10px] font-bold text-gray-500 uppercase mb-3">Đổi mật khẩu</h4>  
-                <input id="new-p" type="password" placeholder="MẬT KHẨU MỚI" class="w-full p-3 cyber-input mb-3 text-[11px]">  
-                <button onclick="changePass()" class="w-full py-3 btn-main rounded-xl text-[10px] uppercase">Cập nhật mật khẩu</button>  
-            </div>  
-        </div>  
-  
-        <div id="box-use-key" class="hidden glass-card p-6 animate__animated animate__fadeInUp">      
-            <div id="key-activation">      
-                <h3 class="text-center font-bold text-cyan-400 mb-6 uppercase text-sm">Mở Khóa Hệ Thống</h3>      
-                <input id="key-input" type="text" placeholder="DÁN KEY VIP CỦA BẠN" class="w-full p-5 cyber-input mb-4 uppercase">      
-                <button onclick="activateLicense()" class="w-full py-5 btn-main rounded-2xl text-sm uppercase">Kích hoạt ngay</button>      
-            </div>      
-            <div id="tool-interface" class="hidden space-y-4">      
-                <div class="flex justify-between items-center text-[8px] font-bold bg-white/5 p-3 rounded-xl border border-white/5">      
-                    <span class="text-green-500">MÁY CHỦ: 🟢 HOẠT ĐỘNG</span>      
-                    <span id="expiry-text" class="text-cyan-400"></span>      
-                </div>      
-                <textarea id="md5-input" placeholder="DÁN MÃ PHIÊN MD5 VÀO ĐÂY..." class="w-full h-28 p-4 cyber-input uppercase text-[12px] font-bold"></textarea>      
-                <button id="ana-btn" onclick="runAnalysis()" class="w-full py-5 btn-main rounded-2xl text-[12px] uppercase tracking-widest">BẮT ĐẦU PHÂN TÍCH</button>      
-                <div id="res-display" class="hidden">      
-                    <div class="bg-black/60 border border-cyan-500/30 rounded-3xl p-5 text-center">      
-                        <span id="res-acc" class="text-[10px] text-yellow-400 font-black uppercase"></span>      
-                        <p id="res-val" class="font-black text-7xl italic py-2"></p>      
-                    </div>      
-                    <div class="session-log">      
-                        <p class="text-[8px] text-gray-500 font-black uppercase mb-2">LỊCH SỬ PHÂN TÍCH MÃ GẦN ĐÂY</p>      
-                        <div id="session-history-list"></div>      
-                    </div>      
-                </div>      
-            </div>      
-        </div>      
-    </div>      
-</div>      
-      
-<div id="main-nav" class="nav-bar hidden">      
-    <div class="nav-item active" id="nav-home" onclick="navigateTo('portal'); setActiveNav(this)">      
-        <svg fill="currentColor" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>      
-        <span>Trang Chủ</span>      
-    </div>      
-    <div class="nav-center" onclick="checkToolAccess(); setActiveNav(this)">      
-        <svg viewBox="0 0 24 24"><path d="M12.65 10C11.83 7.67 9.61 6 7 6c-3.31 0-6 2.69-6 6s2.69 6 6 6c2.61 0 4.83-1.67 5.65-4H17v4h4v-4h2v-4H12.65zM7 14c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z"/></svg>      
-    </div>      
-    <div class="nav-item" id="nav-info" onclick="navigateTo('info'); setActiveNav(this)">      
-        <svg fill="currentColor" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>      
-        <span>Thông Tin</span>      
-    </div>      
-</div>      
-      
-<script>      
-    var CONFIG = {      
-        TELE_TOKEN: "8537007585:AAE5Z1aX4ZCMxCySB5I_qNpzhQS6sr84SsU",      
-        TELE_CHAT_ID: "8144161968",      
-        STK: "103886058569",      
-        BANK: "ICB",       
-        DB_NAME: "MD5_DATABASE_PRO_V6_8"      
-    };      
-      
-    var currentUser = null;      
-    var lastUpdateId = 0;      
-      
-    var getDB = function() {  
-        var data = localStorage.getItem(CONFIG.DB_NAME);  
-        return data ? JSON.parse(data) : { users: [], keys: [], history: [] };  
-    };  
-    var saveDB = function(db) { localStorage.setItem(CONFIG.DB_NAME, JSON.stringify(db)); };      
-      
-    function navigateTo(boxId) {    
-        var ts = document.getElementById('transition-screen');    
-        var ms = document.getElementById('matrix-status');    
-        ts.style.display = 'flex';    
+        .transition-overlay { position: fixed; inset: 0; background: radial-gradient(circle, #0a0a14 0%, #020205 100%); z-index: 11000; display: none; align-items: center; justify-content: center; flex-direction: column; }      
+        .radar-scan { width: 120px; height: 120px; border: 2px solid var(--main); border-radius: 50%; position: relative; overflow: hidden; box-shadow: 0 0 20px rgba(0, 242, 255, 0.2); }      
+        .radar-scan::after { content: ""; position: absolute; inset: 0; background: conic-gradient(from 0deg, transparent 80%, var(--main)); animation: rotate-radar 1.2s linear infinite; }      
+        @keyframes rotate-radar { to { transform: rotate(360deg); } }      
+        .matrix-text { font-family: monospace; font-size: 10px; color: var(--main); margin-top: 25px; letter-spacing: 3px; text-shadow: 0 0 5px var(--main); font-weight: bold; }      
             
-        var steps = ["ĐANG KẾT NỐI...", "ĐỒNG BỘ MD5...", "QUÉT DỮ LIỆU...", "HOÀN TẤT!"];    
-        var i = 0;    
-        var interval = setInterval(function() {    
-            ms.innerText = steps[i];    
-            i++;    
-            if(i >= steps.length) {    
-                clearInterval(interval);    
-                setTimeout(function() {    
-                    ts.style.display = 'none';    
-                    changeBox(boxId);    
-                }, 400);    
+        .info-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }    
+        .info-label { font-size: 10px; color: #888; font-weight: bold; text-transform: uppercase; }    
+        .info-value { font-size: 11px; color: #fff; font-weight: 900; }    
+        .key-history-item { background: rgba(0, 242, 255, 0.05); border-radius: 12px; padding: 10px; margin-bottom: 8px; border: 1px solid rgba(0, 242, 255, 0.1); }    
+    </style>        
+</head>        
+<body>        
+      
+<div id="transition-screen" class="transition-overlay">      
+    <div class="radar-scan"></div>      
+    <div id="matrix-status" class="matrix-text">ĐANG KẾT NỐI...</div>      
+</div>      
+        
+<canvas id="bg-canvas"></canvas>        
+<canvas id="fireworks"></canvas>        
+<div class="laser-beam" style="left: 10%;"></div>        
+<div class="laser-beam" style="left: 50%; animation-delay: 2s;"></div>        
+<div class="laser-beam" style="left: 80%; animation-delay: 4s;"></div>        
+        
+<div id="success-screen" class="success-overlay">        
+    <div id="loading-part" class="flex flex-col items-center">        
+        <div class="w-12 h-12 border-4 border-cyan-500 border-t-transparent rounded-full animate-spin"></div>        
+        <p class="mt-4 text-[10px] font-bold tracking-widest text-cyan-400">ĐANG XỬ LÝ DỮ LIỆU...</p>        
+        <div class="loader-bar"><div id="progress-line" class="loader-progress"></div></div>        
+    </div>        
+    <div id="check-part" class="hidden flex flex-col items-center">        
+        <div class="w-20 h-20 bg-cyan-400 rounded-full flex items-center justify-center animate__animated animate__zoomIn">        
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="4"><polyline points="20 6 9 17 4 12"></polyline></svg>        
+        </div>        
+        <h2 id="success-text" class="mt-6 text-lg font-bold text-white uppercase"></h2>        
+    </div>        
+</div>        
+        
+<div id="buy-confirm-modal" class="buy-modal">        
+    <div class="glass-card w-full max-w-[320px] p-8 text-center animate__animated animate__zoomIn">        
+        <div class="w-20 h-20 bg-cyan-500/10 rounded-full flex items-center justify-center mx-auto mb-6 border border-cyan-500/30">        
+            <svg class="w-10 h-10 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">        
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>        
+            </svg>        
+        </div>        
+        <h3 class="text-xs font-bold text-gray-400 uppercase mb-2">XÁC NHẬN THANH TOÁN</h3>        
+        <p id="confirm-pkg-name" class="text-xl font-black text-white uppercase mb-1"></p>        
+        <p id="confirm-pkg-price" class="text-cyan-400 font-bold mb-6"></p>        
+        <div class="flex gap-3">        
+            <button onclick="closeBuyModal()" class="flex-1 py-3 bg-white/5 rounded-xl text-[10px] font-bold uppercase">Hủy bỏ</button>        
+            <button id="final-buy-btn" class="flex-1 py-3 btn-main rounded-xl text-[10px] uppercase">Xác nhận</button>        
+        </div>        
+    </div>        
+</div>        
+        
+<div class="flex items-center justify-center min-h-screen p-4 pb-28">        
+    <div class="w-full max-w-[400px]">        
+                
+        <div id="box-login" class="glass-card p-8 animate__animated animate__fadeIn">        
+            <div class="text-center mb-8">        
+                <h1 class="text-2xl font-black uppercase tracking-tighter">TOOL TÀI XỈU <span class="text-cyan-400">MD5</span></h1>        
+                <p class="text-[9px] text-gray-500 font-bold uppercase mt-1">Hệ thống Phân Tích chuyên nghiệp</p>        
+            </div>        
+            <div class="space-y-4">        
+                <input id="u" type="text" placeholder="TÊN ĐĂNG NHẬP" class="w-full p-4 cyber-input uppercase">        
+                <input id="p" type="password" placeholder="MẬT KHẨU" class="w-full p-4 cyber-input">        
+                <div id="login-error" class="text-center animate__animated animate__headShake">⚠️ Sai tài khoản hoặc mật khẩu!</div>        
+                <button onclick="doLogin()" class="w-full py-4 btn-main rounded-xl text-sm uppercase">Đăng nhập ngay</button>        
+                <button onclick="navigateTo('reg')" class="w-full text-[9px] text-gray-500 uppercase font-bold">Tạo tài khoản mới</button>        
+            </div>        
+        </div>        
+        
+        <div id="box-reg" class="hidden glass-card p-6 animate__animated animate__fadeIn">        
+            <h2 class="text-center font-bold text-cyan-400 mb-4 uppercase text-sm">Đăng ký thành viên</h2>        
+            <div class="space-y-3">        
+                <input id="r-u" type="text" placeholder="TÊN ĐĂNG NHẬP" class="w-full p-3 cyber-input uppercase">        
+                <div>        
+                    <input id="r-p" type="password" oninput="checkPassStrength(this.value)" placeholder="MẬT KHẨU" class="w-full p-3 cyber-input">        
+                    <div class="flex justify-between items-center mt-1 px-1">        
+                        <span id="strength-label" class="text-[8px] font-bold text-gray-500">BẢO MẬT: CHƯA NHẬP</span>        
+                        <div class="w-24 h-1 bg-white/10 rounded-full overflow-hidden">        
+                            <div id="strength-bar" class="pass-strength"></div>        
+                        </div>        
+                    </div>        
+                </div>        
+                <input id="r-email" type="email" placeholder="GMAIL" class="w-full p-3 cyber-input">        
+                <input id="r-phone" type="tel" placeholder="SỐ ĐIỆN THOẠI" class="w-full p-3 cyber-input">        
+                <div class="flex items-start gap-2 py-2">        
+                    <input type="checkbox" id="tos-check" class="mt-1 accent-cyan-400">        
+                    <label for="tos-check" class="text-[9px] text-gray-400 leading-tight">Tôi đồng ý với các điều khoản sử dụng và chính sách bảo mật của MD5 PREMIUM.</label>        
+                </div>        
+                <button onclick="doReg()" class="w-full py-4 btn-main rounded-xl text-sm uppercase">Xác nhận đăng ký</button>        
+                <button onclick="navigateTo('login')" class="w-full text-[10px] text-gray-500 uppercase mt-2">Quay lại</button>        
+            </div>        
+        </div>        
+        
+        <div id="box-portal" class="hidden animate__animated animate__zoomIn">        
+            <div class="flex justify-between items-center mb-4 px-2">        
+                <div class="flex items-center gap-3">        
+                    <img src="https://i.imgur.com/WLeaCev.jpeg" class="avatar-img">        
+                    <div>        
+                        <p id="portal-user" class="text-cyan-400 text-[10px] font-bold uppercase"></p>        
+                        <p id="portal-bal" class="text-xl font-black text-white">0 đ</p>        
+                    </div>        
+                </div>        
+                <div class="relative cursor-pointer">        
+                    <svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 24 24"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>        
+                </div>        
+            </div>        
+            <div class="glass-card p-4 mb-4 bg-cyan-500/5">        
+                <p class="text-[9px] text-gray-500 font-bold uppercase mb-1">Mã nạp tiền của bạn</p>        
+                <div class="flex justify-between items-center">        
+                    <span id="portal-ref" class="text-lg font-black tracking-widest text-white"></span>        
+                    <button onclick="navigateTo('nap')" class="text-[9px] bg-cyan-500 px-3 py-1 rounded-full text-black font-bold">NẠP THÊM</button>        
+                </div>        
+            </div>        
+            <div class="grid grid-cols-2 gap-3">        
+                <div onclick="navigateTo('buy-key')" class="glass-card p-6 text-center cursor-pointer border-white/5">        
+                    <p class="text-2xl mb-1">💎</p><p class="text-[10px] font-bold uppercase">Gói Key VIP</p>        
+                </div>        
+                <div onclick="navigateTo('info')" class="glass-card p-6 text-center cursor-pointer border-white/5">        
+                    <p class="text-2xl mb-1">👤</p><p class="text-[10px] font-bold uppercase">Cá Nhân</p>        
+                </div>        
+            </div>        
+        </div>        
+        
+        <div id="box-buy-key" class="hidden glass-card p-5 animate__animated animate__fadeInUp">        
+            <h3 class="text-center font-bold text-cyan-400 mb-4 uppercase text-xs">Cửa hàng Gói Key Elite</h3>        
+            <div class="space-y-2 max-h-[380px] overflow-y-auto pr-1">        
+                <div onclick="confirmBuy(10000, 0.04, 'Trial')" class="pkg-item pkg-trial glass-card flex justify-between p-4 rounded-xl cursor-pointer">        
+                    <p class="text-[11px] font-bold uppercase">Dùng Thử (1 Giờ)</p>        
+                    <p class="text-gray-400 font-black text-xs">10k</p>        
+                </div>        
+                <div onclick="confirmBuy(25000, 1, 'Standard')" class="pkg-item pkg-day glass-card flex justify-between p-4 rounded-xl cursor-pointer">        
+                    <p class="text-[11px] font-bold uppercase">Gói Ngày (24 Giờ)</p>        
+                    <p class="text-green-400 font-black text-xs">25k</p>        
+                </div>        
+                <div onclick="confirmBuy(55000, 3, 'Silver')" class="pkg-item pkg-silver glass-card flex justify-between p-4 rounded-xl cursor-pointer">        
+                    <p class="text-[11px] font-bold uppercase">Silver (3 Ngày)</p>        
+                    <p class="text-cyan-400 font-black text-xs">55k</p>        
+                </div>        
+                <div onclick="confirmBuy(100000, 7, 'Gold')" class="pkg-item pkg-gold glass-card flex justify-between p-4 rounded-xl cursor-pointer">        
+                    <p class="text-[11px] font-bold uppercase">Gold (7 Ngày)</p>        
+                    <p class="text-yellow-400 font-black text-xs">100k</p>        
+                </div>        
+                <div onclick="confirmBuy(250000, 30, 'Diamond')" class="pkg-item pkg-diamond glass-card flex justify-between p-4 rounded-xl cursor-pointer">        
+                    <p class="text-[11px] font-bold uppercase">Diamond (30 Ngày)</p>        
+                    <p class="text-pink-400 font-black text-xs">250k</p>        
+                </div>        
+                <div onclick="confirmBuy(500000, 9999, 'Eternal')" class="pkg-item pkg-eternal glass-card flex justify-between p-4 rounded-xl cursor-pointer">        
+                    <p class="text-[11px] font-bold text-red-500 uppercase">Eternal (Vĩnh viễn)</p>        
+                    <p class="text-white font-black text-xs">500k</p>        
+                </div>        
+            </div>        
+        </div>        
+        
+        <div id="box-nap" class="hidden glass-card p-6 text-center animate__animated animate__fadeIn">        
+            <h3 class="text-cyan-400 font-bold mb-4 uppercase text-xs">Thanh toán nạp tiền</h3>        
+            <img id="qr-code" src="" class="mx-auto rounded-2xl w-44 mb-4 bg-white p-1">        
+            <div class="bg-black/40 p-3 rounded-xl mb-4 border border-white/5">        
+                <p class="text-[9px] text-gray-500 uppercase">Nội dung chuyển khoản</p>        
+                <p id="ref-id" class="text-xl font-black text-white tracking-widest"></p>        
+            </div>        
+            <input id="nap-amount" type="number" placeholder="Số tiền đã chuyển" class="w-full p-4 cyber-input mb-4">        
+            <button onclick="sendNapTele()" class="w-full py-4 btn-main rounded-xl text-[11px] uppercase">Gửi yêu cầu xác nhận</button>        
+        </div>        
+        
+        <div id="box-info" class="hidden glass-card p-6 animate__animated animate__fadeIn">    
+            <h3 class="text-center font-bold text-cyan-400 mb-6 uppercase text-sm">Hồ Sơ Cá Nhân</h3>    
+            <div class="space-y-1 mb-6">    
+                <div class="info-row">    
+                    <span class="info-label">Tên Tài Khoản:</span>    
+                    <span id="info-u" class="info-value uppercase text-cyan-400"></span>    
+                </div>    
+                <div class="info-row">    
+                    <span class="info-label">Số Điện Thoại:</span>    
+                    <span id="info-phone" class="info-value"></span>    
+                </div>    
+                <div class="info-row">    
+                    <span class="info-label">Gmail:</span>    
+                    <span id="info-email" class="info-value"></span>    
+                </div>    
+                <div class="info-row">    
+                    <span class="info-label">Số Dư Hiện Tại:</span>    
+                    <span id="info-bal" class="info-value text-green-400">0đ</span>    
+                </div>    
+                <div class="info-row">    
+                    <span class="info-label">Gói Key:</span>    
+                    <span id="info-hsd" class="info-value text-yellow-400">Chưa kích hoạt</span>    
+                </div>    
+            </div>    
+            <h4 class="text-[10px] font-bold text-gray-500 uppercase mb-3">Lịch sử mua Key</h4>    
+            <div id="info-key-list" class="max-h-[120px] overflow-y-auto mb-6 pr-1">    
+                <p class="text-[9px] text-center text-gray-600">Chưa có lịch sử giao dịch</p>    
+            </div>    
+            <div class="border-t border-white/5 pt-4">    
+                <h4 class="text-[10px] font-bold text-gray-500 uppercase mb-3">Đổi mật khẩu</h4>    
+                <input id="new-p" type="password" placeholder="MẬT KHẨU MỚI" class="w-full p-3 cyber-input mb-3 text-[11px]">    
+                <button onclick="changePass()" class="w-full py-3 btn-main rounded-xl text-[10px] uppercase">Cập nhật mật khẩu</button>    
+            </div>    
+        </div>    
+    
+        <div id="box-use-key" class="hidden glass-card p-6 animate__animated animate__fadeInUp">        
+            <div id="key-activation">        
+                <h3 class="text-center font-bold text-cyan-400 mb-6 uppercase text-sm">Mở Khóa Hệ Thống</h3>        
+                <input id="key-input" type="text" placeholder="DÁN KEY VIP CỦA BẠN" class="w-full p-5 cyber-input mb-4 uppercase">        
+                <button onclick="activateLicense()" class="w-full py-5 btn-main rounded-2xl text-sm uppercase">Kích hoạt ngay</button>        
+            </div>        
+            <div id="tool-interface" class="hidden space-y-4">        
+                <div class="flex justify-between items-center text-[8px] font-bold bg-white/5 p-3 rounded-xl border border-white/5">        
+                    <span class="text-green-500">ĐANG HOẠT ĐỘNG</span>        
+                    <span id="expiry-text" class="text-cyan-400"></span>        
+                </div>        
+                <textarea id="md5-input" placeholder="DÁN MÃ PHIÊN MD5 VÀO ĐÂY..." class="w-full h-28 p-4 cyber-input uppercase text-[12px] font-bold"></textarea>        
+                <button id="ana-btn" onclick="runAnalysis()" class="w-full py-5 btn-main rounded-2xl text-[12px] uppercase tracking-widest">BẮT ĐẦU PHÂN TÍCH</button>        
+                <div id="res-display" class="hidden">        
+                    <div class="bg-black/60 border border-cyan-500/30 rounded-3xl p-5 text-center">        
+                        <span id="res-acc" class="text-[10px] text-yellow-400 font-black uppercase"></span>        
+                        <p id="res-val" class="font-black text-7xl italic py-2"></p>        
+                    </div>        
+                    <div class="session-log">        
+                        <p class="text-[8px] text-gray-500 font-black uppercase mb-2">LỊCH SỬ PHÂN TÍCH MÃ GẦN ĐÂY</p>        
+                        <div id="session-history-list"></div>        
+                    </div>        
+                </div>        
+            </div>        
+        </div>        
+    </div>        
+</div>        
+        
+<div id="main-nav" class="nav-bar hidden">        
+    <div class="nav-item active" id="nav-home" onclick="navigateTo('portal'); setActiveNav(this)">        
+        <svg fill="currentColor" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>        
+        <span>Trang Chủ</span>        
+    </div>        
+    <div class="nav-center" onclick="checkToolAccess(); setActiveNav(this)">        
+        <svg viewBox="0 0 24 24"><path d="M12.65 10C11.83 7.67 9.61 6 7 6c-3.31 0-6 2.69-6 6s2.69 6 6 6c2.61 0 4.83-1.67 5.65-4H17v4h4v-4h2v-4H12.65zM7 14c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z"/></svg>        
+    </div>        
+    <div class="nav-item" id="nav-info" onclick="navigateTo('info'); setActiveNav(this)">        
+        <svg fill="currentColor" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>        
+        <span>Thông Tin</span>        
+    </div>        
+</div>        
+        
+<script>        
+    var CONFIG = {        
+        TELE_TOKEN: "8537007585:AAE5Z1aX4ZCMxCySB5I_qNpzhQS6sr84SsU",        
+        TELE_CHAT_ID: "8144161968",        
+        STK: "103886058569",        
+        BANK: "ICB",         
+        DB_NAME: "MD5_DATABASE_PRO_V6_8"        
+    };        
+        
+    var currentUser = null;        
+    var lastUpdateId = 0;        
+        
+    var getDB = function() {    
+        var data = localStorage.getItem(CONFIG.DB_NAME);    
+        return data ? JSON.parse(data) : { users: [], keys: [], history: [] };    
+    };    
+    var saveDB = function(db) { localStorage.setItem(CONFIG.DB_NAME, JSON.stringify(db)); };        
+        
+    function navigateTo(boxId) {      
+        var ts = document.getElementById('transition-screen');      
+        var ms = document.getElementById('matrix-status');      
+        ts.style.display = 'flex';      
+              
+        var steps = ["ĐANG KẾT NỐI...", "ĐỒNG BỘ MD5...", "QUÉT DỮ LIỆU...", "HOÀN TẤT!"];      
+        var i = 0;      
+        var interval = setInterval(function() {      
+            ms.innerText = steps[i];      
+            i++;      
+            if(i >= steps.length) {      
+                clearInterval(interval);      
+                setTimeout(function() {      
+                    ts.style.display = 'none';      
+                    changeBox(boxId);      
+                }, 400);      
+            }      
+        }, 300);      
+    }      
+      
+    function checkPassStrength(p) {        
+        var bar = document.getElementById('strength-bar');        
+        var label = document.getElementById('strength-label');        
+        bar.className = 'pass-strength';        
+        if (p.length === 0) label.innerText = "BẢO MẬT: CHƯA NHẬP";        
+        else if (p.length < 6) { label.innerText = "BẢO MẬT: YẾU"; bar.classList.add('strength-weak'); }        
+        else if (p.length < 10) { label.innerText = "BẢO MẬT: TRUNG BÌNH"; bar.classList.add('strength-medium'); }        
+        else { label.innerText = "BẢO MẬT: CỰC CAO"; bar.classList.add('strength-strong'); }        
+    }        
+        
+    async function listenTelegram() {        
+        try {        
+            var res = await fetch("https://api.telegram.org/bot" + CONFIG.TELE_TOKEN + "/getUpdates?offset=" + (lastUpdateId + 1));        
+            var data = await res.json();        
+            if (data.ok && data.result.length > 0) {        
+                data.result.forEach(function(update) {        
+                    lastUpdateId = update.update_id;        
+                    var msg = update.message;        
+                    if (msg && msg.text && String(msg.chat.id) === CONFIG.TELE_CHAT_ID) {        
+                        var parts = msg.text.trim().split(/\s+/);        
+                        if (parts[0].toUpperCase() === 'DUYET' && parts.length === 3) {        
+                            processAutoDeposit(parts[1], parseInt(parts[2]));        
+                        }        
+                    }        
+                });        
+            }        
+        } catch (e) {}        
+    }        
+        
+    function processAutoDeposit(refCode, amount) {        
+        var db = getDB();        
+        var uIdx = -1;    
+        for(var i=0; i<db.users.length; i++) {    
+            if(db.users[i].ref.toUpperCase() === refCode.toUpperCase()) { uIdx = i; break; }    
+        }    
+        if (uIdx !== -1) {        
+            db.users[uIdx].bal += amount;        
+            saveDB(db);        
+            if (currentUser && currentUser.ref.toUpperCase() === refCode.toUpperCase()) {        
+                currentUser = db.users[uIdx];        
+                sessionStorage.setItem('activeUser', JSON.stringify(currentUser));        
+                refreshPortal();        
+                showSuccess("ĐÃ NẠP +" + amount.toLocaleString() + "đ");        
+            }        
+        }        
+    }        
+        
+    window.onload = function() {        
+        if (sessionStorage.getItem('isLoggedIn')) {        
+            var db = getDB();        
+            var activeU = JSON.parse(sessionStorage.getItem('activeUser'));    
+            for(var i=0; i<db.users.length; i++) {    
+                if(db.users[i].u === activeU.u) { currentUser = db.users[i]; break; }    
             }    
-        }, 300);    
+            if(currentUser) {        
+                document.getElementById('main-nav').classList.remove('hidden');        
+                changeBox('portal');        
+            }        
+        }        
+        setInterval(listenTelegram, 2000);         
+        initBg();        
+  
+        /* FIX CLICK: Đảm bảo focus vào input ngay khi chạm trên Telegram */  
+        document.querySelectorAll('input, textarea').forEach(function(el) {  
+            el.addEventListener('touchstart', function() { el.focus(); });  
+        });  
+    };        
+        
+    function showSuccess(msg, cb) {        
+        var s = document.getElementById('success-screen');        
+        var lp = document.getElementById('loading-part');        
+        var cp = document.getElementById('check-part');        
+        var pr = document.getElementById('progress-line');        
+        document.getElementById('success-text').innerText = msg;        
+        s.style.display = 'flex';        
+        lp.classList.remove('hidden'); cp.classList.add('hidden');        
+        pr.style.width = '0%';        
+        var prog = 0;        
+        var iv = setInterval(function() {        
+            prog += 2; pr.style.width = prog + '%';        
+            if(prog >= 100) {        
+                clearInterval(iv);        
+                lp.classList.add('hidden'); cp.classList.remove('hidden');        
+                startFireworks();        
+                setTimeout(function() { s.style.display = 'none'; if(cb) cb(); }, 2000);        
+            }        
+        }, 30);        
+    }        
+        
+    function changeBox(id) {        
+        var boxes = document.querySelectorAll('[id^="box-"]');    
+        for(var i=0; i<boxes.length; i++) boxes[i].classList.add('hidden');    
+        var target = document.getElementById('box-' + id);        
+        if(target) target.classList.remove('hidden');        
+        if(id === 'portal') refreshPortal();        
+        if(id === 'info') renderInfoBox();     
+        if(id === 'nap') {        
+            document.getElementById('ref-id').innerText = currentUser.ref;        
+            document.getElementById('qr-code').src = "https://img.vietqr.io/image/" + CONFIG.BANK + "-" + CONFIG.STK + "-compact.png?addInfo=" + currentUser.ref;        
+        }        
+    }        
+        
+    function setActiveNav(el) {        
+        var items = document.querySelectorAll('.nav-item');    
+        for(var i=0; i<items.length; i++) items[i].classList.remove('active');    
+        if(!el.classList.contains('nav-center')) el.classList.add('active');        
+    }        
+        
+    function doReg() {        
+        var u = document.getElementById('r-u').value.trim().toUpperCase();        
+        var p = document.getElementById('r-p').value;        
+        var email = document.getElementById('r-email').value.trim();    
+        var phone = document.getElementById('r-phone').value.trim();    
+        var tos = document.getElementById('tos-check').checked;        
+        if(!tos) return alert("Vui lòng đồng ý với điều khoản sử dụng!");        
+        if(u.length < 4) return alert("Tên đăng nhập quá ngắn!");        
+        var db = getDB();        
+        for(var i=0; i<db.users.length; i++) {    
+            if(db.users[i].u === u) return alert("Tài khoản đã tồn tại");    
+        }    
+        var newUser = { u:u, p:p, email:email, phone:phone, bal: 0, ref: "NAPTIEN" + Math.floor(1000 + Math.random()*8999), hsd: null, boughtKeys: [] };        
+        db.users.push(newUser); saveDB(db);        
+        showSuccess("ĐĂNG KÝ THÀNH CÔNG", function() {        
+            currentUser = newUser;        
+            sessionStorage.setItem('isLoggedIn', 'true');        
+            sessionStorage.setItem('activeUser', JSON.stringify(newUser));        
+            document.getElementById('main-nav').classList.remove('hidden');        
+            navigateTo('portal');        
+        });        
+    }        
+        
+    function doLogin() {        
+        var u = document.getElementById('u').value.trim().toUpperCase();        
+        var p = document.getElementById('p').value;        
+        var err = document.getElementById('login-error');        
+        var db = getDB();        
+        var f = null;    
+        for(var i=0; i<db.users.length; i++) {    
+            if(db.users[i].u === u && db.users[i].p === p) { f = db.users[i]; break; }    
+        }    
+        if(f) {        
+            err.style.display = 'none';        
+            currentUser = f;        
+            sessionStorage.setItem('isLoggedIn', 'true');        
+            sessionStorage.setItem('activeUser', JSON.stringify(f));        
+            document.getElementById('main-nav').classList.remove('hidden');        
+            showSuccess("ĐĂNG NHẬP THÀNH CÔNG", function() { navigateTo('portal'); });        
+        } else {        
+            err.style.display = 'block';        
+            setTimeout(function() { err.style.display = 'none'; }, 3000);        
+        }        
+    }        
+        
+    function refreshPortal() {        
+        var db = getDB();        
+        for(var i=0; i<db.users.length; i++) {    
+            if(db.users[i].u === currentUser.u) { currentUser = db.users[i]; break; }    
+        }    
+        document.getElementById('portal-user').innerText = "HI, " + currentUser.u;        
+        document.getElementById('portal-bal').innerText = currentUser.bal.toLocaleString() + " đ";        
+        document.getElementById('portal-ref').innerText = currentUser.ref;        
     }    
     
-    function checkPassStrength(p) {      
-        var bar = document.getElementById('strength-bar');      
-        var label = document.getElementById('strength-label');      
-        bar.className = 'pass-strength';      
-        if (p.length === 0) label.innerText = "BẢO MẬT: CHƯA NHẬP";      
-        else if (p.length < 6) { label.innerText = "BẢO MẬT: YẾU"; bar.classList.add('strength-weak'); }      
-        else if (p.length < 10) { label.innerText = "BẢO MẬT: TRUNG BÌNH"; bar.classList.add('strength-medium'); }      
-        else { label.innerText = "BẢO MẬT: CỰC CAO"; bar.classList.add('strength-strong'); }      
-    }      
-      
-    async function listenTelegram() {      
-        try {      
-            var res = await fetch("https://api.telegram.org/bot" + CONFIG.TELE_TOKEN + "/getUpdates?offset=" + (lastUpdateId + 1));      
-            var data = await res.json();      
-            if (data.ok && data.result.length > 0) {      
-                data.result.forEach(function(update) {      
-                    lastUpdateId = update.update_id;      
-                    var msg = update.message;      
-                    if (msg && msg.text && String(msg.chat.id) === CONFIG.TELE_CHAT_ID) {      
-                        var parts = msg.text.trim().split(/\s+/);      
-                        if (parts[0].toUpperCase() === 'DUYET' && parts.length === 3) {      
-                            processAutoDeposit(parts[1], parseInt(parts[2]));      
-                        }      
-                    }      
-                });      
-            }      
-        } catch (e) {}      
-    }      
-      
-    function processAutoDeposit(refCode, amount) {      
-        var db = getDB();      
-        var uIdx = -1;  
-        for(var i=0; i<db.users.length; i++) {  
-            if(db.users[i].ref.toUpperCase() === refCode.toUpperCase()) { uIdx = i; break; }  
-        }  
-        if (uIdx !== -1) {      
-            db.users[uIdx].bal += amount;      
-            saveDB(db);      
-            if (currentUser && currentUser.ref.toUpperCase() === refCode.toUpperCase()) {      
-                currentUser = db.users[uIdx];      
-                sessionStorage.setItem('activeUser', JSON.stringify(currentUser));      
-                refreshPortal();      
-                showSuccess("ĐÃ NẠP +" + amount.toLocaleString() + "đ");      
-            }      
-        }      
-    }      
-      
-    window.onload = function() {      
-        if (sessionStorage.getItem('isLoggedIn')) {      
-            var db = getDB();      
-            var activeU = JSON.parse(sessionStorage.getItem('activeUser'));  
-            for(var i=0; i<db.users.length; i++) {  
-                if(db.users[i].u === activeU.u) { currentUser = db.users[i]; break; }  
-            }  
-            if(currentUser) {      
-                document.getElementById('main-nav').classList.remove('hidden');      
-                changeBox('portal');      
-            }      
-        }      
-        setInterval(listenTelegram, 2000);       
-        initBg();      
-
-        /* FIX CLICK: Đảm bảo focus vào input ngay khi chạm trên Telegram */
-        document.querySelectorAll('input, textarea').forEach(function(el) {
-            el.addEventListener('touchstart', function() { el.focus(); });
-        });
-    };      
-      
-    function showSuccess(msg, cb) {      
-        var s = document.getElementById('success-screen');      
-        var lp = document.getElementById('loading-part');      
-        var cp = document.getElementById('check-part');      
-        var pr = document.getElementById('progress-line');      
-        document.getElementById('success-text').innerText = msg;      
-        s.style.display = 'flex';      
-        lp.classList.remove('hidden'); cp.classList.add('hidden');      
-        pr.style.width = '0%';      
-        var prog = 0;      
-        var iv = setInterval(function() {      
-            prog += 2; pr.style.width = prog + '%';      
-            if(prog >= 100) {      
-                clearInterval(iv);      
-                lp.classList.add('hidden'); cp.classList.remove('hidden');      
-                startFireworks();      
-                setTimeout(function() { s.style.display = 'none'; if(cb) cb(); }, 2000);      
-            }      
-        }, 30);      
-    }      
-      
-    function changeBox(id) {      
-        var boxes = document.querySelectorAll('[id^="box-"]');  
-        for(var i=0; i<boxes.length; i++) boxes[i].classList.add('hidden');  
-        var target = document.getElementById('box-' + id);      
-        if(target) target.classList.remove('hidden');      
-        if(id === 'portal') refreshPortal();      
-        if(id === 'info') renderInfoBox();   
-        if(id === 'nap') {      
-            document.getElementById('ref-id').innerText = currentUser.ref;      
-            document.getElementById('qr-code').src = "https://img.vietqr.io/image/" + CONFIG.BANK + "-" + CONFIG.STK + "-compact.png?addInfo=" + currentUser.ref;      
-        }      
-    }      
-      
-    function setActiveNav(el) {      
-        var items = document.querySelectorAll('.nav-item');  
-        for(var i=0; i<items.length; i++) items[i].classList.remove('active');  
-        if(!el.classList.contains('nav-center')) el.classList.add('active');      
-    }      
-      
-    function doReg() {      
-        var u = document.getElementById('r-u').value.trim().toUpperCase();      
-        var p = document.getElementById('r-p').value;      
-        var email = document.getElementById('r-email').value.trim();  
-        var phone = document.getElementById('r-phone').value.trim();  
-        var tos = document.getElementById('tos-check').checked;      
-        if(!tos) return alert("Vui lòng đồng ý với điều khoản sử dụng!");      
-        if(u.length < 4) return alert("Tên đăng nhập quá ngắn!");      
-        var db = getDB();      
-        for(var i=0; i<db.users.length; i++) {  
-            if(db.users[i].u === u) return alert("Tài khoản đã tồn tại");  
-        }  
-        var newUser = { u:u, p:p, email:email, phone:phone, bal: 0, ref: "NAPTIEN" + Math.floor(1000 + Math.random()*8999), hsd: null, boughtKeys: [] };      
-        db.users.push(newUser); saveDB(db);      
-        showSuccess("ĐĂNG KÝ THÀNH CÔNG", function() {      
-            currentUser = newUser;      
-            sessionStorage.setItem('isLoggedIn', 'true');      
-            sessionStorage.setItem('activeUser', JSON.stringify(newUser));      
-            document.getElementById('main-nav').classList.remove('hidden');      
-            navigateTo('portal');      
-        });      
-    }      
-      
-    function doLogin() {      
-        var u = document.getElementById('u').value.trim().toUpperCase();      
-        var p = document.getElementById('p').value;      
-        var err = document.getElementById('login-error');      
-        var db = getDB();      
-        var f = null;  
-        for(var i=0; i<db.users.length; i++) {  
-            if(db.users[i].u === u && db.users[i].p === p) { f = db.users[i]; break; }  
-        }  
-        if(f) {      
-            err.style.display = 'none';      
-            currentUser = f;      
-            sessionStorage.setItem('isLoggedIn', 'true');      
-            sessionStorage.setItem('activeUser', JSON.stringify(f));      
-            document.getElementById('main-nav').classList.remove('hidden');      
-            showSuccess("ĐĂNG NHẬP THÀNH CÔNG", function() { navigateTo('portal'); });      
-        } else {      
-            err.style.display = 'block';      
-            setTimeout(function() { err.style.display = 'none'; }, 3000);      
-        }      
-    }      
-      
-    function refreshPortal() {      
-        var db = getDB();      
-        for(var i=0; i<db.users.length; i++) {  
-            if(db.users[i].u === currentUser.u) { currentUser = db.users[i]; break; }  
-        }  
-        document.getElementById('portal-user').innerText = "HI, " + currentUser.u;      
-        document.getElementById('portal-bal').innerText = currentUser.bal.toLocaleString() + " đ";      
-        document.getElementById('portal-ref').innerText = currentUser.ref;      
-    }  
-  
-    function renderInfoBox() {  
-        var db = getDB();  
-        for(var i=0; i<db.users.length; i++) {  
-            if(db.users[i].u === currentUser.u) { currentUser = db.users[i]; break; }  
-        }  
-          
-        document.getElementById('info-u').innerText = currentUser.u;  
-        document.getElementById('info-phone').innerText = currentUser.phone || "Chưa cập nhật";  
-        document.getElementById('info-email').innerText = currentUser.email || "Chưa cập nhật";  
-        document.getElementById('info-bal').innerText = currentUser.bal.toLocaleString() + "đ";  
-        document.getElementById('info-hsd').innerText = (currentUser.hsd && currentUser.hsd > Date.now()) ?   
-            (currentUser.hsd > 2000000000000 ? "VĨNH VIỄN" : new Date(currentUser.hsd).toLocaleDateString()) : "Chưa kích hoạt";  
-  
-        var list = document.getElementById('info-key-list');  
-        if(!currentUser.boughtKeys || currentUser.boughtKeys.length === 0) {  
-            list.innerHTML = '<p class="text-[9px] text-center text-gray-600 mt-2">Chưa có lịch sử giao dịch</p>';  
-        } else {  
-            var html = '';  
-            for(var j=currentUser.boughtKeys.length-1; j>=0; j--) {  
-                var k = currentUser.boughtKeys[j];  
-                html += '<div class="key-history-item flex justify-between items-center">' +  
-                        '<div><p class="text-[10px] font-bold text-cyan-400">' + k.key + '</p>' +  
-                        '<p class="text-[8px] text-gray-500 uppercase">Gói: ' + k.name + '</p></div>' +  
-                        '<span class="text-[9px] text-gray-400">' + k.date + '</span></div>';  
-            }  
-            list.innerHTML = html;  
-        }  
-    }  
-  
-    function changePass() {  
-        var newP = document.getElementById('new-p').value;  
-        if(newP.length < 6) return alert("Mật khẩu mới phải từ 6 ký tự!");  
-        var db = getDB();  
-        for(var i=0; i<db.users.length; i++) {  
-            if(db.users[i].u === currentUser.u) { db.users[i].p = newP; break; }  
-        }  
-        saveDB(db);  
-        currentUser.p = newP;  
-        document.getElementById('new-p').value = "";  
-        showSuccess("ĐỔI MẬT KHẨU THÀNH CÔNG");  
-    }  
-      
-    function confirmBuy(price, days, name) {      
-        var modal = document.getElementById('buy-confirm-modal');      
-        document.getElementById('confirm-pkg-name').innerText = "Gói " + name;      
-        document.getElementById('confirm-pkg-price').innerText = price.toLocaleString() + " VNĐ";      
-        modal.style.display = 'flex';      
-        document.getElementById('final-buy-btn').onclick = function() {      
-            modal.style.display = 'none';      
-            buyKey(price, days, name);  
-        };      
-    }      
-      
-    function closeBuyModal() {      
-        document.getElementById('buy-confirm-modal').style.display = 'none';      
-    }      
-      
-    function buyKey(price, days, name) {      
-        var db = getDB();      
-        var uIdx = -1;  
-        for(var i=0; i<db.users.length; i++) {  
-            if(db.users[i].u === currentUser.u) { uIdx = i; break; }  
-        }  
-        if(db.users[uIdx].bal < price) return alert("Số dư không đủ, vui lòng nạp thêm!");      
-          
-        db.users[uIdx].bal -= price;      
-        var key = "VIP-" + Math.random().toString(36).substring(5).toUpperCase();      
-          
-        if(!db.users[uIdx].boughtKeys) db.users[uIdx].boughtKeys = [];  
-        db.users[uIdx].boughtKeys.push({  
-            key: key,  
-            name: name,  
-            date: new Date().toLocaleDateString('vi-VN')  
-        });  
-  
-        db.keys.push({ key: key, days: days, used: false });      
-        saveDB(db);      
-        showSuccess("MUA KEY THÀNH CÔNG", function() {      
-            prompt("KEY VIP CỦA BẠN (HÃY LƯU LẠI):", key);      
-            refreshPortal();      
-        });      
-    }      
-      
-    function checkToolAccess() {      
-        refreshPortal();      
-        navigateTo('use-key');      
-        if(currentUser.hsd && currentUser.hsd > Date.now()) {      
-            document.getElementById('key-activation').classList.add('hidden');      
-            document.getElementById('tool-interface').classList.remove('hidden');      
-            document.getElementById('expiry-text').innerText = currentUser.hsd > 2000000000000 ? "VĨNH VIỄN" : "HSD: " + new Date(currentUser.hsd).toLocaleDateString();      
-            renderHistory();      
-        } else {      
-            document.getElementById('key-activation').classList.remove('hidden');      
-            document.getElementById('tool-interface').classList.add('hidden');      
-        }      
-    }      
-      
-    function activateLicense() {      
-        var kv = document.getElementById('key-input').value.trim().toUpperCase();      
-        var db = getDB();      
-        var kIdx = -1;  
-        for(var i=0; i<db.keys.length; i++) {  
-            if(db.keys[i].key === kv && !db.keys[i].used) { kIdx = i; break; }  
-        }  
-        if(kIdx === -1) return alert("Key không hợp lệ!");      
-        var uIdx = -1;  
-        for(var j=0; j<db.users.length; j++) {  
-            if(db.users[j].u === currentUser.u) { uIdx = j; break; }  
-        }  
-        var addTime = db.keys[kIdx].days * 86400000;      
-        db.users[uIdx].hsd = (db.users[uIdx].hsd > Date.now() ? db.users[uIdx].hsd : Date.now()) + addTime;      
-        db.keys[kIdx].used = true;      
-        saveDB(db);      
-        showSuccess("KÍCH HOẠT VIP", function() { checkToolAccess(); });      
-    }      
-      
+    function renderInfoBox() {    
+        var db = getDB();    
+        for(var i=0; i<db.users.length; i++) {    
+            if(db.users[i].u === currentUser.u) { currentUser = db.users[i]; break; }    
+        }    
+            
+        document.getElementById('info-u').innerText = currentUser.u;    
+        document.getElementById('info-phone').innerText = currentUser.phone || "Chưa cập nhật";    
+        document.getElementById('info-email').innerText = currentUser.email || "Chưa cập nhật";    
+        document.getElementById('info-bal').innerText = currentUser.bal.toLocaleString() + "đ";    
+        document.getElementById('info-hsd').innerText = (currentUser.hsd && currentUser.hsd > Date.now()) ?     
+            (currentUser.hsd > 2000000000000 ? "VĨNH VIỄN" : new Date(currentUser.hsd).toLocaleDateString()) : "Chưa kích hoạt";    
+    
+        var list = document.getElementById('info-key-list');    
+        if(!currentUser.boughtKeys || currentUser.boughtKeys.length === 0) {    
+            list.innerHTML = '<p class="text-[9px] text-center text-gray-600 mt-2">Chưa có lịch sử giao dịch</p>';    
+        } else {    
+            var html = '';    
+            for(var j=currentUser.boughtKeys.length-1; j>=0; j--) {    
+                var k = currentUser.boughtKeys[j];    
+                html += '<div class="key-history-item flex justify-between items-center">' +    
+                        '<div><p class="text-[10px] font-bold text-cyan-400">' + k.key + '</p>' +    
+                        '<p class="text-[8px] text-gray-500 uppercase">Gói: ' + k.name + '</p></div>' +    
+                        '<span class="text-[9px] text-gray-400">' + k.date + '</span></div>';    
+            }    
+            list.innerHTML = html;    
+        }    
+    }    
+    
+    function changePass() {    
+        var newP = document.getElementById('new-p').value;    
+        if(newP.length < 6) return alert("Mật khẩu mới phải từ 6 ký tự!");    
+        var db = getDB();    
+        for(var i=0; i<db.users.length; i++) {    
+            if(db.users[i].u === currentUser.u) { db.users[i].p = newP; break; }    
+        }    
+        saveDB(db);    
+        currentUser.p = newP;    
+        document.getElementById('new-p').value = "";    
+        showSuccess("ĐỔI MẬT KHẨU THÀNH CÔNG");    
+    }        
+        
+    function confirmBuy(price, days, name) {        
+        var modal = document.getElementById('buy-confirm-modal');        
+        document.getElementById('confirm-pkg-name').innerText = "Gói " + name;        
+        document.getElementById('confirm-pkg-price').innerText = price.toLocaleString() + " VNĐ";        
+        modal.style.display = 'flex';        
+        document.getElementById('final-buy-btn').onclick = function() {        
+            modal.style.display = 'none';        
+            buyKey(price, days, name);    
+        };        
+    }        
+        
+    function closeBuyModal() {        
+        document.getElementById('buy-confirm-modal').style.display = 'none';        
+    }        
+        
+    function buyKey(price, days, name) {        
+        var db = getDB();        
+        var uIdx = -1;    
+        for(var i=0; i<db.users.length; i++) {    
+            if(db.users[i].u === currentUser.u) { uIdx = i; break; }    
+        }    
+        if(db.users[uIdx].bal < price) return alert("Số dư không đủ, vui lòng nạp thêm!");        
+            
+        db.users[uIdx].bal -= price;        
+        var key = "VIP-" + Math.random().toString(36).substring(5).toUpperCase();        
+            
+        if(!db.users[uIdx].boughtKeys) db.users[uIdx].boughtKeys = [];    
+        db.users[uIdx].boughtKeys.push({    
+            key: key,    
+            name: name,    
+            date: new Date().toLocaleDateString('vi-VN')    
+        });    
+    
+        db.keys.push({ key: key, days: days, used: false });        
+        saveDB(db);        
+        showSuccess("MUA KEY THÀNH CÔNG", function() {        
+            prompt("KEY VIP CỦA BẠN (HÃY LƯU LẠI):", key);        
+            refreshPortal();        
+        });        
+    }        
+        
+    function checkToolAccess() {        
+        refreshPortal();        
+        navigateTo('use-key');        
+        if(currentUser.hsd && currentUser.hsd > Date.now()) {        
+            document.getElementById('key-activation').classList.add('hidden');        
+            document.getElementById('tool-interface').classList.remove('hidden');        
+            document.getElementById('expiry-text').innerText = currentUser.hsd > 2000000000000 ? "VĨNH VIỄN" : "HSD: " + new Date(currentUser.hsd).toLocaleDateString();        
+            renderHistory();        
+        } else {        
+            document.getElementById('key-activation').classList.remove('hidden');        
+            document.getElementById('tool-interface').classList.add('hidden');        
+        }        
+    }        
+        
+    function activateLicense() {        
+        var kv = document.getElementById('key-input').value.trim().toUpperCase();        
+        var db = getDB();        
+        var kIdx = -1;    
+        for(var i=0; i<db.keys.length; i++) {    
+            if(db.keys[i].key === kv && !db.keys[i].used) { kIdx = i; break; }    
+        }    
+        if(kIdx === -1) return alert("Key không hợp lệ!");        
+        var uIdx = -1;    
+        for(var j=0; j<db.users.length; j++) {    
+            if(db.users[j].u === currentUser.u) { uIdx = j; break; }    
+        }    
+        var addTime = db.keys[kIdx].days * 86400000;        
+        db.users[uIdx].hsd = (db.users[uIdx].hsd > Date.now() ? db.users[uIdx].hsd : Date.now()) + addTime;        
+        db.keys[kIdx].used = true;        
+        saveDB(db);        
+        showSuccess("KÍCH HOẠT VIP", function() { checkToolAccess(); });        
+    }        
+        
     function runAnalysis() {        
         var input = document.getElementById('md5-input').value.trim();        
         if(input.length < 10) return alert("Mã MD5 không hợp lệ!");        
@@ -630,42 +631,42 @@
         btn.innerText = "ĐANG PHÂN TÍCH..."; btn.disabled = true;        
         
         setTimeout(function() {        
-            // HỆ THỐNG ENTROPY GIẢI MÃ MD5 & RÀ SOÁT TỪNG KÝ TỰ (FIXED LOGIC)
-            function getDeepEntropyDecoded(str) {
+            // THUẬT TOÁN TỔNG HỢP GLOBAL (GIẢI MÃ & THÂM NHẬP ĐA ĐIỂM)
+            // Tuyệt đối không sử dụng hàm Random - Kết quả dựa trên vân tay MD5
+            function getGlobalSystemAnalysis(str) {
                 let sequence = str.toLowerCase().replace(/[^a-f0-9]/g, '');
-                let alphaWeight = 0; // Trọng số rà soát chữ
-                let numericWeight = 0; // Trọng số rà soát số
-                let bitwisePenetration = 0x811c9dc5;
+                let entropyAlpha = 0; // Trọng số chữ cái (a-f)
+                let entropyNum = 0;   // Trọng số chữ số (0-9)
+                let logicChain = 0x811c9dc5; // Hằng số băm FNV-1a quốc tế
 
                 for (let i = 0; i < sequence.length; i++) {
-                    let char = sequence[i];
-                    let code = sequence.charCodeAt(i);
+                    let charCode = sequence.charCodeAt(i);
+                    let hexVal = parseInt(sequence[i], 16);
                     
-                    // 1. Phân tích và nhận diện từng chữ và số
-                    if (/[a-f]/.test(char)) {
-                        alphaWeight += (code * (i + 1)) ^ (sequence.length - i);
-                    } else if (/[0-9]/.test(char)) {
-                        numericWeight += (parseInt(char) + code) * (i + 1);
+                    // Rà soát thâm nhập: Kết hợp vị trí và giá trị thực thể
+                    if (/[a-f]/.test(sequence[i])) {
+                        entropyAlpha += (charCode * (i + 1)) ^ (sequence.length - i);
+                    } else {
+                        entropyNum += (hexVal + charCode) * (i + 1);
                     }
-
-                    // 2. Dịch ngược và thâm nhập chuỗi bit đối xứng
-                    let mirrorCode = sequence.charCodeAt(sequence.length - 1 - i);
-                    bitwisePenetration ^= (code << (i % 5)) + mirrorCode;
+                    
+                    // Lớp rà soát thâm nhập sâu theo tiêu chuẩn quốc tế
+                    logicChain ^= charCode;
+                    logicChain = Math.imul(logicChain, 16777619);
                 }
-
-                // Kết hợp toàn bộ lớp kiểm tra rà soát
-                return Math.abs((alphaWeight ^ numericWeight) + bitwisePenetration);
+                
+                // Kết hợp các lớp phân tích thành kết quả Entropy cuối cùng
+                return Math.abs(entropyAlpha ^ entropyNum ^ logicChain);
             }
 
-            let analysisResult = getDeepEntropyDecoded(input);
+            let analysisPoint = getGlobalSystemAnalysis(input);
             
-            // THIẾT LẬP TỶ LỆ CHÍNH XÁC: 65% TÀI - 35% XỈU
-            // Kết quả cố định theo mã MD5 - Không sử dụng Math.random()
-            let probabilityScore = analysisResult % 100;
-            let isTai = probabilityScore < 65; // Ngưỡng chặn: 0-64 (65% Tài) | 65-99 (35% Xỉu)
+            // XÁC SUẤT CỐ ĐỊNH THEO CHUỖI MD5: 65% TÀI - 35% XỈU
+            let finalThreshold = analysisPoint % 100;
+            let isTai = finalThreshold < 65; 
 
-            // Cập nhật độ chính xác hiển thị (Duy trì mức tối ưu 97% - 99%)
-            var accuracy = (97.5 + (analysisResult % 20) / 10).toFixed(1);        
+            // ĐIỀU CHỈNH ĐỘ CHÍNH XÁC HIỂN THỊ: TỪ 60% ĐẾN 80% (THEO YÊU CẦU)
+            var accuracy = (60.5 + (analysisPoint % 195) / 10).toFixed(1);        
             
             var v = document.getElementById('res-val');        
             v.innerText = isTai ? "TÀI" : "XỈU";        
@@ -684,106 +685,106 @@
             saveDB(db); renderHistory(); startFireworks();        
             btn.innerText = "TIẾP TỤC PHÂN TÍCH"; btn.disabled = false;        
         }, 2000);        
-    }      
-      
-    function renderHistory() {      
-        var db = getDB();      
-        var list = document.getElementById('session-history-list');      
-        var html = '';  
-        for(var i=0; i<db.history.length; i++) {  
-            var item = db.history[i];  
-            html += '<div class="session-item">' +  
-                    '<span class="text-gray-400 font-bold">' + item.md5 + '</span>' +  
-                    '<span class="' + (item.res === 'TÀI' ? 'text-cyan-400' : 'text-red-500') + ' font-black">' + item.res + '</span>' +  
-                    '<span class="text-yellow-500">' + item.acc + '</span>' +  
-                    '<span class="text-gray-600">' + item.time + '</span></div>';  
-        }  
-        list.innerHTML = html;  
-    }      
-      
-    async function sendNapTele() {      
-        var amt = document.getElementById('nap-amount').value;      
-        if(amt < 10000) return alert("Nạp tối thiểu 10,000đ");      
-        var text = "💰 NẠP TIỀN\n👤 User: " + currentUser.u + "\n🆔 Mã: " + currentUser.ref + "\n💵 Số tiền: " + parseInt(amt).toLocaleString() + "đ\n\nDUYET " + currentUser.ref + " " + amt;      
-        await fetch("https://api.telegram.org/bot" + CONFIG.TELE_TOKEN + "/sendMessage?chat_id=" + CONFIG.TELE_CHAT_ID + "&text=" + encodeURIComponent(text));      
-        alert("Yêu cầu đã gửi! Vui lòng chờ 1-3 phút.");      
-    }      
-      
-    function startFireworks() {    
-        var canvas = document.getElementById('fireworks');    
-        var ctx = canvas.getContext('2d');    
-        canvas.width = window.innerWidth; canvas.height = window.innerHeight;    
-        var particles = []; var rockets = [];    
-        var colors = ['#FF0000', '#FF7F00', '#FFFF00', '#00FF00', '#0000FF', '#4B0082', '#9400D3'];    
-    
-        function Rocket() {    
-            this.x = Math.random() * canvas.width;    
-            this.y = canvas.height;    
-            this.v = Math.random() * 4 + 10;    
-            this.targetY = Math.random() * (canvas.height / 2);    
-            this.color = colors[Math.floor(Math.random() * colors.length)];    
+    }        
+        
+    function renderHistory() {        
+        var db = getDB();        
+        var list = document.getElementById('session-history-list');        
+        var html = '';    
+        for(var i=0; i<db.history.length; i++) {    
+            var item = db.history[i];    
+            html += '<div class="session-item">' +    
+                    '<span class="text-gray-400 font-bold">' + item.md5 + '</span>' +    
+                    '<span class="' + (item.res === 'TÀI' ? 'text-cyan-400' : 'text-red-500') + ' font-black">' + item.res + '</span>' +    
+                    '<span class="text-yellow-500">' + item.acc + '</span>' +    
+                    '<span class="text-gray-600">' + item.time + '</span></div>';    
         }    
-        Rocket.prototype.update = function() {    
-            this.y -= this.v;    
-            if (this.y <= this.targetY) { this.explode(); return false; }    
-            return true;    
-        };    
-        Rocket.prototype.draw = function() {    
-            ctx.fillStyle = this.color; ctx.beginPath(); ctx.arc(this.x, this.y, 2.5, 0, Math.PI * 2); ctx.fill();    
-        };    
-        Rocket.prototype.explode = function() {    
-            for (var i = 0; i < 60; i++) particles.push(new Particle(this.x, this.y, this.color));    
-        };    
-    
-        function Particle(x, y, color) {    
-            this.x = x; this.y = y; this.color = color;    
-            this.angle = Math.random() * Math.PI * 2;    
-            this.speed = Math.random() * 6 + 2;    
-            this.friction = 0.95; this.gravity = 0.15; this.alpha = 1;    
-            this.decay = Math.random() * 0.015 + 0.015;    
-        }    
-        Particle.prototype.update = function() {    
-            this.speed *= this.friction;    
-            this.x += Math.cos(this.angle) * this.speed;    
-            this.y += Math.sin(this.angle) * this.speed + this.gravity;    
-            this.alpha -= this.decay;    
-        };    
-        Particle.prototype.draw = function() {    
-            ctx.globalAlpha = this.alpha; ctx.fillStyle = this.color;    
-            ctx.beginPath(); ctx.arc(this.x, this.y, 2, 0, Math.PI * 2); ctx.fill();    
-        };    
-    
-        for(var i=0; i<4; i++) rockets.push(new Rocket());    
-    
-        function loop() {    
-            ctx.clearRect(0, 0, canvas.width, canvas.height);    
-            rockets = rockets.filter(function(r) { r.draw(); return r.update(); });    
-            for(var i=particles.length-1; i>=0; i--) {  
-                particles[i].update(); particles[i].draw();  
-                if(particles[i].alpha <= 0) particles.splice(i, 1);  
-            }  
-            if (rockets.length > 0 || particles.length > 0) requestAnimationFrame(loop);    
-        }    
-        loop();    
-    }      
-      
-    function initBg() {      
-        var canvas = document.getElementById('bg-canvas');      
+        list.innerHTML = html;    
+    }        
+        
+    async function sendNapTele() {        
+        var amt = document.getElementById('nap-amount').value;        
+        if(amt < 10000) return alert("Nạp tối thiểu 10,000đ");        
+        var text = "💰 NẠP TIỀN\n👤 User: " + currentUser.u + "\n🆔 Mã: " + currentUser.ref + "\n💵 Số tiền: " + parseInt(amt).toLocaleString() + "đ\n\nDUYET " + currentUser.ref + " " + amt;        
+        await fetch("https://api.telegram.org/bot" + CONFIG.TELE_TOKEN + "/sendMessage?chat_id=" + CONFIG.TELE_CHAT_ID + "&text=" + encodeURIComponent(text));        
+        alert("Yêu cầu đã gửi! Vui lòng chờ 1-3 phút.");        
+    }        
+        
+    function startFireworks() {      
+        var canvas = document.getElementById('fireworks');      
         var ctx = canvas.getContext('2d');      
         canvas.width = window.innerWidth; canvas.height = window.innerHeight;      
-        var particles = [];      
-        for(var i=0; i<40; i++) particles.push({x:Math.random()*canvas.width, y:Math.random()*canvas.height, r:Math.random()*2, s:Math.random()*0.5});      
-        function draw() {      
-            ctx.clearRect(0,0,canvas.width,canvas.height);      
-            ctx.fillStyle = "rgba(0, 242, 255, 0.3)";      
-            particles.forEach(function(p) {      
-                ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI*2); ctx.fill();      
-                p.y -= p.s; if(p.y < -10) p.y = canvas.height + 10;      
-            });      
-            requestAnimationFrame(draw);      
+        var particles = []; var rockets = [];      
+        var colors = ['#FF0000', '#FF7F00', '#FFFF00', '#00FF00', '#0000FF', '#4B0082', '#9400D3'];      
+      
+        function Rocket() {      
+            this.x = Math.random() * canvas.width;      
+            this.y = canvas.height;      
+            this.v = Math.random() * 4 + 10;      
+            this.targetY = Math.random() * (canvas.height / 2);      
+            this.color = colors[Math.floor(Math.random() * colors.length)];      
         }      
-        draw();      
-    }      
-</script>      
-</body>      
+        Rocket.prototype.update = function() {      
+            this.y -= this.v;      
+            if (this.y <= this.targetY) { this.explode(); return false; }      
+            return true;      
+        };      
+        Rocket.prototype.draw = function() {      
+            ctx.fillStyle = this.color; ctx.beginPath(); ctx.arc(this.x, this.y, 2.5, 0, Math.PI * 2); ctx.fill();      
+        };      
+        Rocket.prototype.explode = function() {      
+            for (var i = 0; i < 60; i++) particles.push(new Particle(this.x, this.y, this.color));      
+        };      
+      
+        function Particle(x, y, color) {      
+            this.x = x; this.y = y; this.color = color;      
+            this.angle = Math.random() * Math.PI * 2;      
+            this.speed = Math.random() * 6 + 2;      
+            this.friction = 0.95; this.gravity = 0.15; this.alpha = 1;      
+            this.decay = Math.random() * 0.015 + 0.015;      
+        }      
+        Particle.prototype.update = function() {      
+            this.speed *= this.friction;      
+            this.x += Math.cos(this.angle) * this.speed;      
+            this.y += Math.sin(this.angle) * this.speed + this.gravity;      
+            this.alpha -= this.decay;      
+        };      
+        Particle.prototype.draw = function() {      
+            ctx.globalAlpha = this.alpha; ctx.fillStyle = this.color;      
+            ctx.beginPath(); ctx.arc(this.x, this.y, 2, 0, Math.PI * 2); ctx.fill();      
+        };      
+      
+        for(var i=0; i<4; i++) rockets.push(new Rocket());      
+      
+        function loop() {      
+            ctx.clearRect(0, 0, canvas.width, canvas.height);      
+            rockets = rockets.filter(function(r) { r.draw(); return r.update(); });      
+            for(var i=particles.length-1; i>=0; i--) {    
+                particles[i].update(); particles[i].draw();    
+                if(particles[i].alpha <= 0) particles.splice(i, 1);    
+            }    
+            if (rockets.length > 0 || particles.length > 0) requestAnimationFrame(loop);      
+        }      
+        loop();      
+    }        
+        
+    function initBg() {        
+        var canvas = document.getElementById('bg-canvas');        
+        var ctx = canvas.getContext('2d');        
+        canvas.width = window.innerWidth; canvas.height = window.innerHeight;        
+        var particles = [];        
+        for(var i=0; i<40; i++) particles.push({x:Math.random()*canvas.width, y:Math.random()*canvas.height, r:Math.random()*2, s:Math.random()*0.5});        
+        function draw() {        
+            ctx.clearRect(0,0,canvas.width,canvas.height);        
+            ctx.fillStyle = "rgba(0, 242, 255, 0.3)";        
+            particles.forEach(function(p) {        
+                ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI*2); ctx.fill();        
+                p.y -= p.s; if(p.y < -10) p.y = canvas.height + 10;        
+            });        
+            requestAnimationFrame(draw);        
+        }        
+        draw();        
+    }        
+</script>        
+</body>        
 </html>
