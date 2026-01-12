@@ -7,6 +7,10 @@
     <script src="https://cdn.tailwindcss.com"></script>    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>    
     <style>    
+
+        /* FIX CHẶN CLICK & SOẠN THẢO */
+        * { -webkit-user-select: none; user-select: none; box-sizing: border-box; outline: none !important; -webkit-tap-highlight-color: transparent; }      
+        input, textarea { -webkit-user-select: auto !important; user-select: auto !important; cursor: text !important; }
         @import url('https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;700;900&display=swap');    
         :root { --main: #00f2ff; --sub: #7000ff; --dark: #020205; }    
         * { -webkit-user-select: none; user-select: none; box-sizing: border-box; outline: none !important; -webkit-tap-highlight-color: transparent; }    
@@ -722,6 +726,12 @@
         }  
         loop();  
     }    
+
+        // Fix Focus Input cho Telegram
+    document.querySelectorAll('input').forEach(i => {
+        i.addEventListener('click', function() { this.focus(); });
+    });
+
     
     function initBg() {    
         var canvas = document.getElementById('bg-canvas');    
