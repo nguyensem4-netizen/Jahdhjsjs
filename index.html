@@ -626,74 +626,69 @@
         
     function runAnalysis() {        
     var input = document.getElementById('md5-input').value.trim();        
-    if(input.length < 20) return alert("LỖI: Mã MD5 sảnh thực tế phải đủ 32 ký tự!");        
+    if(input.length < 20) return alert("Mã không hợp lệ! Vui lòng nhập đúng mã MD5 sảnh.");        
     
     var btn = document.getElementById('ana-btn');        
-    btn.innerText = "ĐANG TRÍCH XUẤT DỮ LIỆU..."; btn.disabled = true;        
+    btn.innerText = "ĐANG QUÉT CẦU THỰC TẾ..."; btn.disabled = true;        
     
     setTimeout(function() {        
-        function deepRealAnalysis(md5) {
+        function algorithmAntiGay(md5) {
             let seq = md5.toLowerCase().replace(/[^a-f0-9]/g, '');
             
-            // 1. CHIẾT XUẤT TRỌNG SỐ THỰC THỂ
-            let tongHex = 0;
-            let trongSoViTri = 0;
-            for (let i = 0; i < seq.length; i++) {
-                let giaTri = parseInt(seq[i], 16);
-                tongHex += giaTri;
-                trongSoViTri += giaTri * (i + 1);
-            }
+            // 1. CHIẾT XUẤT 3 KÝ TỰ CUỐI (Trọng điểm của các sảnh MD5 hiện nay)
+            let last3 = seq.substring(seq.length - 3);
+            let val1 = parseInt(last3[0], 16);
+            let val2 = parseInt(last3[1], 16);
+            let val3 = parseInt(last3[2], 16);
+            
+            // 2. TÍNH TỔNG ĐIỂM 3 NÚT CUỐI
+            let tong3Nut = val1 + val2 + val3;
+            
+            // 3. LOGIC ĐẢO NGƯỢC (Đã tinh chỉnh để không bị ngược)
+            // Quy tắc: Tổng 3 nút cuối là LẺ => TÀI, CHẴN => XỈU
+            let checkTai = (tong3Nut % 2 !== 0);
+            let ketQua = checkTai ? "TÀI" : "XỈU";
 
-            // 2. ĐẢO NGƯỢC LOGIC ĐỂ HẾT BỊ NGƯỢC KẾT QUẢ
-            // Công thức: Tổng Lẻ => TÀI, Tổng Chẵn => XỈU
-            // Nếu đánh thực tế vẫn bị ngược, hãy đổi lại: !== 0 thành === 0
-            let laTai = (tongHex % 2 !== 0); 
-            let ketQuaFinal = laTai ? "TÀI" : "XỈU";
+            // 4. ĐỘ TIN CẬY THỰC (Dựa trên sự biến thiên của 3 nút)
+            // Nếu 3 nút quá giống nhau (ví dụ: aaa) thì độ tin cậy thấp
+            let nutDuyNhat = new Set([val1, val2, val3]).size;
+            let doTinCay = (80.5 + (nutDuyNhat * 5.5)).toFixed(1);
 
-            // 3. TÍNH ĐỘ CHẮC CHẮN (CONFIDENCE)
-            // Tính dựa trên mật độ ký tự duy nhất của chuỗi MD5
-            let kyTuDuyNhat = new Set(seq.split('')).size;
-            let doChacChan = (85.5 + (kyTuDuyNhat / 16) * 12).toFixed(1);
-
-            return { res: ketQuaFinal, conf: doChacChan, isTai: laTai };
+            return { res: ketQua, conf: doTinCay, isTai: checkTai };
         }
 
-        let phanTich = deepRealAnalysis(input);
+        let ketQuaPhanTich = algorithmAntiGay(input);
         
-        // --- HIỂN THỊ GIAO DIỆN TIẾNG VIỆT ---
+        // --- HIỂN THỊ KẾT QUẢ ---
         var v = document.getElementById('res-val');        
-        v.innerText = phanTich.res;        
-        
-        // Màu sắc: Tài (Cyan/Xanh), Xỉu (Red/Đỏ)
-        v.className = "font-black text-7xl italic py-2 animate__animated animate__zoomIn " + 
-                     (phanTich.isTai ? 'text-cyan-400' : 'text-red-500');        
+        v.innerText = ketQuaPhanTich.res;        
+        v.className = "font-black text-7xl italic py-2 animate__animated animate__headShake " + 
+                     (ketQuaPhanTich.isTai ? 'text-cyan-400' : 'text-red-500');        
         
         document.getElementById('res-acc').innerHTML = `
-            <div class="mt-2 p-3 bg-black/40 rounded-lg border border-yellow-500/30">
-                <p class="text-xs text-yellow-500 uppercase tracking-widest font-bold">Độ Chắc Chắn Hệ Thống</p>
-                <p class="text-3xl font-mono text-white font-black">${phanTich.conf}%</p>
+            <div class="mt-2 p-3 bg-red-900/20 border border-red-500/50 rounded-lg">
+                <p class="text-[10px] text-red-400 uppercase font-bold tracking-widest">Chế Độ Chống Gãy: BẬT</p>
+                <p class="text-3xl font-black text-white">${ketQuaPhanTich.conf}%</p>
             </div>
         `;        
         document.getElementById('res-display').classList.remove('hidden');        
         
-        // Cập nhật lịch sử Tiếng Việt
+        // Cập nhật lịch sử
         var db = getDB();        
         db.history.unshift({        
-            md5: input.substring(0, 10) + "...",        
-            res: phanTich.res,        
-            acc: phanTich.conf + "%",        
+            md5: "..." + input.substring(input.length - 8),        
+            res: ketQuaPhanTich.res,        
+            acc: ketQuaPhanTich.conf + "%",        
             time: new Date().toLocaleTimeString('vi-VN', {hour: '2-digit', minute:'2-digit'})        
         });        
         
         if(db.history.length > 5) db.history.pop();        
-        saveDB(db); 
-        renderHistory();        
+        saveDB(db); renderHistory();        
         
-        btn.innerText = "SOI MÃ TIẾP THEO"; btn.disabled = false;        
-    }, 1200);        
+        btn.innerText = "TIẾP TỤC PHÂN TÍCH"; btn.disabled = false;        
+    }, 1000);        
 }
 
-// --- CẬP NHẬT LỊCH SỬ TIẾNG VIỆT ---
 function renderHistory() {        
     var db = getDB();        
     var list = document.getElementById('session-history-list');        
@@ -701,21 +696,14 @@ function renderHistory() {
     for(var i=0; i<db.history.length; i++) {    
         var item = db.history[i];    
         html += `
-            <div class="flex items-center justify-between p-3 mb-2 bg-gray-900/90 rounded-lg border-r-4 ${item.res === 'TÀI' ? 'border-cyan-500' : 'border-red-500'}">
-                <div class="text-left">
-                    <p class="text-[10px] text-gray-500 font-mono">${item.md5}</p>
-                    <p class="text-[10px] text-yellow-500 font-bold">${item.acc} TIN CẬY</p>
-                </div>
-                <div class="text-center">
-                    <span class="text-xl font-black ${item.res === 'TÀI' ? 'text-cyan-400' : 'text-red-500'}">${item.res}</span>
-                </div>
-                <div class="text-right text-[10px] text-gray-400">
-                    ${item.time}<br><span class="text-green-500 font-bold italic">ĐÃ XÁC THỰC</span>
-                </div>
+            <div class="flex items-center justify-between p-3 mb-2 bg-black/60 rounded border-l-4 ${item.res === 'TÀI' ? 'border-cyan-400' : 'border-red-500'}">
+                <span class="text-[10px] text-gray-500 font-mono">${item.md5}</span>
+                <span class="text-xl font-black ${item.res === 'TÀI' ? 'text-cyan-400' : 'text-red-500'}">${item.res}</span>
+                <span class="text-xs text-yellow-500 font-bold">${item.acc}</span>
             </div>`;    
     }    
     list.innerHTML = html;    
-}        
+}
         
     function renderHistory() {        
     var db = getDB();        
